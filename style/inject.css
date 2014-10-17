@@ -17,12 +17,13 @@
 	font-family: 'Lato', sans-serif;
 }
 
+/*Close button style*/
 .peroozStyle#peroozClose{
 	display:inline-block;
 	font-size:1em;
 	color:#ff6600;
 	background-color:#fff; 
-	
+
 }
 
 .peroozStyle#peroozBody{
