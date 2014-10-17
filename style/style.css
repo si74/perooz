@@ -1,0 +1,67 @@
+/*Style for extension popup*/
+/*Overall style*/
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400);
+
+html, body, div,button,input{
+	font-family: 'Lato', sans-serif;
+}
+
+/*Sign in form style*/
+/*Login Container style*/
+.login_container{
+	border-style:solid;
+	border-width: 0.5em;
+	border-radius:5px;
+	border-color:#FF6600;
+	font-size:1em;
+	padding:5px;
+}
+
+/*Input fields*/
+#username{
+	width:178px;
+	height:2em;
+	margin:0.25em;
+	font-size:1em;
+	text-align:center;
+}
+
+#pwd{
+	width:178px;
+	height:2em;
+	margin:0.25em;
+	font-size:1em;
+	text-align:center;
+}
+
+/*Sign in and sign up buttons*/
+#sign_in{
+	width:184px;
+	height:2em;
+	margin:0.25em;
+	font-size:1em;
+	background-color:#17c6fd;
+	border:none;
+	color:#FFF;
+}
+
+#sign_up{
+	width:184px;
+	height:2em;
+	margin:0.25em;
+	font-size:1em;
+	background-color:#17c6fd;
+	border:none;
+	color:#FFF;
+}
+
+#forgot_pw{
+	width:150px;
+	height:1.8em;
+	margin:0.25em;
+	font-size:0.8em;
+	background-color:#FFF;
+	border-style:solid;
+	border-color:#FF6600;
+	color:#FF6600;
+}

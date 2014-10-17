@@ -1,0 +1,76 @@
+/*Overall style*/
+/*Import font*/
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400);
+
+/*Sidebar style*/
+.peroozStyle#peroozSidebar{
+	position:fixed;
+	top: 0;
+	right: 0;
+	width: 360px;
+	margin-right: -360px;
+	height:100%;
+	z-index:9999999999999999999;
+	font-size:1em;
+	background-color: #fff;
+	overflow:scroll;
+	font-family: 'Lato', sans-serif;
+}
+
+.peroozStyle#peroozClose{
+	display:inline-block;
+	font-size:1em;
+	color:#ff6600;
+	background-color:#fff; 
+	
+}
+
+.peroozStyle#peroozBody{
+
+}
+
+.peroozStyle#peroozMain{
+	position:fixed;
+	padding-left:1.5em;
+	padding-right:1.5em;
+	padding-top:150px;
+}
+
+.peroozStyle#peroozTxt{
+	font-weight:bold;
+	font-style:italic;
+}
+
+.peroozStyle#peroozNote{
+
+}
+
+/*Perooz annotation details*/
+.peroozStyle#perooz-mouseicon {
+	position: absolute !important;
+	display: none;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	background-color: #fff;
+	border: 1px solid #ff6600;
+	border-radius: 4px;
+	color: #ff6600;
+	font-family: 'Lato', sans-serif;
+}
+
+.peroozStyle#perooz-mouseicon.active {
+	display: inline-block;
+}
+
