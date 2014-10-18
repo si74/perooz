@@ -44,7 +44,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 					/*Send message to content script to retrieve selected string from activetab*/
 					chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 						chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
-							console.log('message sent');
+							console.log('menu click message sent');
 							// if (response.message != 'OK'){
 							// 	console.log(response.message);
 							// }
@@ -56,16 +56,15 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				cmid = true;
 			}
 
-			/*(3) Set event listener for check for text selection - displays 'create annotation' box*/
-			// $(document.body).addEventListener('mouseup',function(event){
-			// 	var select = window.getSelection().toString(); 
-			// 	console.log(select);
-			// 	alert('selected!');
-			// 	if (select.length > 0){
-			// 		alert('selected!');
-			// 	} 
-			// });
-
+			/*(3) Set event listener for check for text selection - send message to content script to setup listener*/
+			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent", from: "background.js"},function(response){
+					console.log('message sent');
+					// if (response.message != 'OK'){
+					// 	console.log(response.message);
+					// }
+				});
+			});
 
 			/*(4) Grab the url from the current tab*/
 			var tab_url = tab.url;

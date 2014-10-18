@@ -12,8 +12,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 	function Perooz() {
 		_this = this;
 		this.setupReceiver();
-        this.setupMouseicon(); 
-        this.attachObservers(); 
 	}
 	
 	Perooz.prototype = {
@@ -205,7 +203,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 }else{ //if no text selected, mouse icon is hidden
                     _this.hideMouseicon();
                 }
-            })
+
+            });
         },
 
         placeMouseicon : function(rangeBoundingRect, nodeBoundingRect){
@@ -240,8 +239,15 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 		setupReceiver : function() {
             chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
+                //setup mouseicon listener
+                if (request.method == "setupMouseiconEvent"){
+                    console.log('setMouseupevent');
+                    _this.setupMouseicon(); 
+                    _this.attachObservers(); 
+                    sendResponse({message: "OK"});
+                
                 //annotation creation message
-            	if (request.method == "getSelection"){
+            	}else if (request.method == "getSelection"){
             		console.log('message received');
             		var select = window.getSelection().toString();
             		_this.activateCreateSidebar(select);
