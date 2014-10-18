@@ -44,6 +44,10 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 $peroozSidebar.attr('padding-right', '1.5em');
             });
 
+            /*If session token is not present*/
+            // if (_this.sess_cookie == null){
+            //     return; 
+            // }
             /*If actual text is selected*/
         	if (selection.length > 0){
         		console.log(selection);
@@ -55,20 +59,22 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                             <div id="peroozTxt" class="peroozStyle"> "' + selection + '"<div><br/> \
             					            <input id="peroozNote" class="peroozStyle"></input><br/> \
             					            <button id="peroozSubmit" class="peroozStyle">submit</button> \
+                                            <div id="peroozMessage" class="peroozStyle"></div> \
                                          </div> \
                                      </div>');
                 
                 //event function for closing the sidebar
-        		$("#peroozClose.peroozStyle").on('click',function(){
+        		$(".peroozStyle#peroozClose").on('click',function(){
         			_this.deactivateSidebar();
         		});
 
                 //submit annotation to temp db
         		$(".peroozStyle#peroozSubmit").on('click',function(){
-        			if ($(".peroozStyle #peroozNote").val().length > 0){
+        			if ($(".peroozStyle#peroozNote").val().length > 0){
                     //    _this.createNote(selection);
+                        $(".peroozStyle#peroozMessage").html('Annotation successfully created!')
         			}else{
-        				$(".peroozStyle#peroozMain").append('<div id="peroozMessage" class="peroozStyle">Annotation cannot be blank.</div>');
+        				$(".peroozStyle#peroozMessage").html('Annotation cannot be blank.');
         			}
         		});
         	}else{
@@ -97,11 +103,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         //     var in_db = false;
 
         //     /*Retrieve session token*/
-        //     chrome.cookies.get({'url': 'https://dev.perooz.io/api','name':'session_token'},function(cookie){
-        //         if (!cookie){
-        //             message = 'Token expired. Please log back in.';
-        //             return;
-        //         }
+        //     
 
         //         /*Check if article in db*/
         //         var perooz_article_id = $peroozSidebar.has(".peroozStyle#perooz_article_id").innerText()
@@ -128,8 +130,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         //             }
         //         }
         //         xhr.send("");
-
-        //     });
 
         //     $(".peroozStyle#peroozMain").html('<div id="peroozMessage" class="peroozStyle">' + message + '</div>');
         // },
@@ -243,8 +243,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 //setup mouseicon listener
                 if (request.method == "setupMouseiconEvent"){
                     console.log('setMouseupevent');
-                    _this.sess_cookie = request.sess_token; 
-                    console.log(sess_cookie);
+                    _this.sess_cookie = request.sess_token; //set the session token
                     _this.setupMouseicon(); 
                     _this.attachObservers(); 
                     sendResponse({message: "OK"});
@@ -259,6 +258,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 //insert notes into DOM 
                	}else if(request.method == "setNotes"){
                		sendResponse({message: "OK"});
+                    _this.sess_cookie = request.sess_token;
                     _this.setNotes(request.perooz_article_id);
 
                 //read notes
@@ -269,6 +269,13 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 //set reminder to log in to page
                	}else if(request.method == "setReminder"){
                		sendResponse({message: "OK"});
+
+                //remove session token [if user logs out]
+                }else if(request.method == "removeSess"){
+                    if (_this.sess_cookie != null){
+                        _this.sess_cookie = null;
+                    }
+                    sendResponse({message: "OK"});
 
                 //if message is not legitimate
                	}else{
