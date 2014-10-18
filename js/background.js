@@ -43,7 +43,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 					/*Send message to content script to retrieve selected string from activetab*/
 					chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-						chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
+						chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection",sess_token: cookie.value, from: "background.js"},function(response){
 							console.log('menu click message sent');
 							// if (response.message != 'OK'){
 							// 	console.log(response.message);
@@ -58,7 +58,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 			/*(3) Set event listener for check for text selection - send message to content script to setup listener*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent", from: "background.js"},function(response){
+				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent",sess_token: cookie.value, from: "background.js"},function(response){
 					console.log('message sent');
 					// if (response.message != 'OK'){
 					// 	console.log(response.message);

@@ -19,7 +19,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 		// Public functions
 		constructor : Perooz,
 		sidebarTransitionDuration : 400,
-        $mouseicon : null, 
+        $mouseicon : null,
+        sess_cookie: null, 
         mouseiconPosition: {
             top: -9999, 
             left: -9999
@@ -242,6 +243,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 //setup mouseicon listener
                 if (request.method == "setupMouseiconEvent"){
                     console.log('setMouseupevent');
+                    _this.sess_cookie = request.sess_token; 
+                    console.log(sess_cookie);
                     _this.setupMouseicon(); 
                     _this.attachObservers(); 
                     sendResponse({message: "OK"});
