@@ -33,7 +33,17 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				return;
 			}
 
-			/*(2) Set the chrome context menu*/
+			/*(2) Send message to content script to set value of session cookie*/
+			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+				chrome.tabs.sendMessage(tabs[0].id,{method: "setSess",sess_cookie: cookie.value,from: "background.js"},function(response){
+					console.log('message sent');
+					// if (response.message != 'OK'){
+					// 	console.log(response.message);
+					// }
+				});
+			});
+
+			/*(3) Set the chrome context menu*/
 			if (!cmid){
 				
 				chrome.contextMenus.create({"title": "Create Perooz Annotation", "id":"p_menu","contexts":["all"]});
@@ -43,7 +53,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 					/*Send message to content script to retrieve selected string from activetab*/
 					chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-						chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection",sess_token: cookie.value, from: "background.js"},function(response){
+						chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
 							console.log('menu click message sent');
 							// if (response.message != 'OK'){
 							// 	console.log(response.message);
@@ -56,9 +66,9 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				cmid = true;
 			}
 
-			/*(3) Set event listener for check for text selection - send message to content script to setup listener*/
+			/*(4) Set event listener for check for text selection - send message to content script to setup listener*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent",sess_token: cookie.value, from: "background.js"},function(response){
+				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent", from: "background.js"},function(response){
 					console.log('message sent');
 					// if (response.message != 'OK'){
 					// 	console.log(response.message);
@@ -66,7 +76,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				});
 			});
 
-			/*(4) Grab the url from the current tab*/
+			/*(5) Grab the url from the current tab*/
 			var tab_url = tab.url;
 			var purl_url = $.url(tab_url);
 			var url_adjusted = tab_url.replace((purl_url.attr('protocol')+'://'),"");
@@ -79,7 +89,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 			xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
 			xhr.setRequestHeader("Session-Token",cookie.value);
 
-			/*(4) If url is in database, call fxns from content script to display all annotation links*/
+			/*(6) If url is in database, call fxns from content script to display all annotation links*/
 			xhr.onreadystatechange = function(){
 				if (xhr.readyState == 4){
 					var raw_data = xhr.responseText;

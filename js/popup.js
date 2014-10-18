@@ -67,6 +67,17 @@ $(document).ready(function(){
 			$("#logout").on('click',function(){
 				chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
 					$('.main').html("Logged out! Please refresh page to log back in.");
+				
+					/*Send message to remove session token*/
+					chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+						chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "popup.js"},function(response){
+							console.log('message sent');
+							// if (response.message != 'OK'){
+							// 	console.log(response.message);
+							// }
+						});
+					});
+
 				});
 			});
 
@@ -149,7 +160,28 @@ $(document).ready(function(){
 											/*Set logout button listener*/
 											$("#logout").on('click',function(){
 												chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
-													$('.main').html("Logged out! Please refresh page to log back in.");		
+													$('.main').html("Logged out! Please refresh page to log back in.");	
+
+													/*Send message to remove session token*/
+													chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+														chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "popup.js"},function(response){
+															console.log('message sent');
+															// if (response.message != 'OK'){
+															// 	console.log(response.message);
+															// }
+														});
+													});
+
+												});
+											});
+
+											/*Send message to set session cookie in the content script of the page*/
+											chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+												chrome.tabs.sendMessage(tabs[0].id,{method: "setSess",sess_cookie: sess_token,from: "popup.js"},function(response){
+													console.log('message sent');
+													// if (response.message != 'OK'){
+													// 	console.log(response.message);
+													// }
 												});
 											});
 
