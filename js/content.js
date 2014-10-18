@@ -45,47 +45,55 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             });
 
             /*If session token is not present*/
-            // if (_this.sess_cookie == null){
-            //     return; 
-            // }
-            /*If actual text is selected*/
-        	if (selection.length > 0){
-        		console.log(selection);
-                
-                //set perooz sidebar menu
-        		$peroozSidebar.html('<div id="peroozBody" class="peroozStyle"> \
-                                         <button id="peroozClose" class ="peroozStyle">close</button> \
-                                         <div id="peroozMain" class="peroozStyle"> \
-                                            <div id="peroozTxt" class="peroozStyle"> "' + selection + '"<div><br/> \
-            					            <input id="peroozNote" class="peroozStyle"></input><br/> \
-            					            <button id="peroozSubmit" class="peroozStyle">submit</button> \
-                                            <div id="peroozMessage" class="peroozStyle"></div> \
-                                         </div> \
+            if (_this.sess_cookie == null){
+                $peroozSidebar.html('<button id="peroozClose" class="peroozStyle">close</button> \
+                                     <div id="peroozMain" class="peroozStyle"> \
+                                        <div id="peroozTxt" class="peroozStyle">Error! Session token expired. Please login again.</div> \
                                      </div>');
-                
-                //event function for closing the sidebar
-        		$(".peroozStyle#peroozClose").on('click',function(){
-        			_this.deactivateSidebar();
-        		});
+                $(".peroozStyle#peroozClose").on('click',function(){
+                    _this.deactivateSidebar();
+                });
+                return; 
+            }
 
-                //submit annotation to temp db
-        		$(".peroozStyle#peroozSubmit").on('click',function(){
-        			if ($(".peroozStyle#peroozNote").val().length > 0){
-                    //    _this.createNote(selection);
-                        $(".peroozStyle#peroozMessage").html('Annotation successfully created!')
-        			}else{
-        				$(".peroozStyle#peroozMessage").html('Annotation cannot be blank.');
-        			}
-        		});
-        	}else{
-        		$peroozSidebar.html('<button id="peroozClose" class="peroozStyle">close</button> \
+            /*If text length is not greater than 0*/
+            if (selection.length <= 0){
+                console.log(selection);
+                $peroozSidebar.html('<button id="peroozClose" class="peroozStyle">close</button> \
                                      <div id="peroozMain" class="peroozStyle"> \
                                         <div id="peroozTxt" class="peroozStyle">Error! Must select text before making annotation.</div> \
                                      </div>');
-        		$(".peroozStyle#peroozClose").on('click',function(){
-        			_this.deactivateSidebar();
-        		});
-        	}
+                $(".peroozStyle#peroozClose").on('click',function(){
+                    _this.deactivateSidebar();
+                });
+                return;
+            }
+       
+            //set perooz sidebar menu
+    		$peroozSidebar.html('<div id="peroozBody" class="peroozStyle"> \
+                                     <button id="peroozClose" class ="peroozStyle">close</button> \
+                                     <div id="peroozMain" class="peroozStyle"> \
+                                        <div id="peroozTxt" class="peroozStyle"> "' + selection + '"<div><br/> \
+        					            <input id="peroozNote" class="peroozStyle"></input><br/> \
+        					            <button id="peroozSubmit" class="peroozStyle">submit</button> \
+                                        <div id="peroozMessage" class="peroozStyle"></div> \
+                                     </div> \
+                                 </div>');
+            
+            //event function for closing the sidebar
+    		$(".peroozStyle#peroozClose").on('click',function(){
+    			_this.deactivateSidebar();
+    		});
+
+            //submit annotation to temp db
+    		$(".peroozStyle#peroozSubmit").on('click',function(){
+    			if ($(".peroozStyle#peroozNote").val().length > 0){
+                //    _this.createNote(selection);
+                    $(".peroozStyle#peroozMessage").html('Annotation successfully created!')
+    			}else{
+    				$(".peroozStyle#peroozMessage").html('Annotation cannot be blank.');
+    			}
+    		});
         },
 
         // activateReadSidebar: function(notegroup_id,noteid){
