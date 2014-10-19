@@ -152,6 +152,42 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             /*Insert hidden div tag into perooz sidebar*/
             $peroozSidebar.append('<div id="perooz_article_id" class="peroozStyle" style="visibility:hidden;">' + perooz_article_id + '</div>');
 
+            /*(1) Grab notegroup array from background page and display*/
+            var xhr = new XMLHttpRequest();
+            var url = "https://dev.perooz.io/api/articles/" + perooz_article_id + "/notegroup_lists"; 
+            xhr.open("GET", url, true);
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+            xhr.setRequestHeader("Session-Token",cookie.value);
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
+
+                    if (xhr.status == 200){
+                        console.log('Succesfully grabbed annotations.');
+                        
+                        var notegroup_array = data.values;
+                        console.log(notegroup_array);
+
+                         /*(2) Go through each item in notegroup array*/ 
+                        
+
+                    }else{
+                        console.log('Unable to fetch annotations.');       
+                    }
+                }
+            }
+            xhr.send();
+
+           
+
+            /*grab text of each notegroup*/
+
+            /*Search for the text in each page*/
+
+            /*Place miniature perooz icon after text*/ 
+
         },
 
         /*Hide sidebar*/

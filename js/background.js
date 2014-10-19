@@ -82,7 +82,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 			var url_adjusted = tab_url.replace((purl_url.attr('protocol')+'://'),"");
 
 			/*Prep the the xmlhttprequest*/
-			xhr = new XMLHttpRequest();
+			var xhr = new XMLHttpRequest();
 			var url = "https://dev.perooz.io/api/search/articles?url=" + encodeURIComponent(url_adjusted); 
 			xhr.open("GET", url, true);
 			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
