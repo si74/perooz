@@ -144,6 +144,72 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
     		});
 
     		/*Grab notes for notegroup and place in the page*/
+    		var xhr = new XMLHttpRequest();
+            var url = "https://dev.perooz.io/api/notegroups/" + notegroup_id + "/note_lists"; 
+            xhr.open("GET", url, false); //note that this is a synchronous request
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+            xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+            xhr.onreadystatechange = function(){
+            	if (xhr.readyState == 4){
+            		var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
+
+            		if (xhr.status == 200){
+            			
+            			var notelist_array = data.values;
+                        var notelist_arrayLength = notelist_array.length; //grab list of notes for notegroup
+
+                        for (var i=0; i< notelist_arrayLength; i++){ //iterate through notelist
+                            console.log(notelist_array[i]);
+
+                            var note_id = notelist_array[i]; //grab note details for each note
+                            
+                            /*Set request for note details*/
+                            var xhr1 = new XMLHttpRequest(); 
+                            var url1 = "https://dev.perooz.io/api/notes/" + notelist_array[i];
+                            xhr1.open("GET",url1,false); //synchronous request
+                            xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                            xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
+                            xhr1.setRequestHeader("Session-Token",_this.sess_cookie);
+                            xhr1.onreadystatechange = function(){
+                            	if (xhr1.readyState == 4){
+                            		
+                            		var raw_data1 = xhr1.responseText;
+                                   	var data1 =JSON.parse(raw_data1);
+
+                            		if (xhr1.status == 200){
+
+                            			var note = data1.values;
+
+                            			console.log(note_inline);
+
+                            			var note_inline = note.inline_text;
+                            			var note_text =  note.note_text;
+                            			
+                            			//grab contributor details
+                      					//this part will be completed later
+
+                      					//display note and contributor details
+                      					$('#peroozMain').append('<div id="' + notelist_array[i] + '" class="peroozStyle peroozNote"> \
+                      												<div id="peroozNoteInline" class="peroozStyle">' + note_inline + '<div> <br/><br/> \
+                      												<div id="peroozNoteText" class="peroozStyle">' + note_text + '<div> <br/><br/> \
+                      												<br/> \
+                      										    </div>');
+
+                      					//add an line image afer note if not the last in the notegroup
+                      						
+                            		}
+                            	}
+                            }
+                            xhr1.send();
+
+                        }
+
+            		}
+            	}
+            }
+            xhr.send();
 
         },
         
@@ -234,7 +300,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                         var notegroup_info = data1.values;
                                         var img_url = chrome.extension.getURL("images/icon_mini.png");
                                         //NOTE: TEMP SOL'N. Search for text in each page and place icon with id - note this is temp solution. need better parser
-                                        $("p:contains('" + notegroup_info.note_text_overlap + "')").append('<button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:0px;border:0px;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNote"/>');
+                                        $("p:contains('" + notegroup_info.note_text_overlap + "')").append('<button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:0px;border:0px;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNotegroup"/>');
                                     }
                                 }
                             }
@@ -243,7 +309,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                          }
 
                          /*Set event listener for icon click*/
-                         $('.peroozNote').on('click',function(){
+                         $('.peroozNotegroup').on('click',function(){
                          	_this.activateReadSidebar(this.id);
                          });
                         
