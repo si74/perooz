@@ -29,5 +29,9 @@
   "background"],
   "icons": {
     "16": "images/icon_mini.png"
-  }
+  },
+  "web_accessible_resources":[
+    "images/*.png",
+    "js/templates/*"
+  ]
 }

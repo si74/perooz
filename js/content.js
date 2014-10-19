@@ -96,11 +96,56 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
     		});
         },
 
-        // activateReadSidebar: function(notegroup_id,noteid){
-        //  	var $body = $('body');
-        //  	var $peroozSidebar = $('.peroozStyle #peroozSidebar');
+        /*When notegroup icon is pressed, sidebar comes out*/
+        activateReadSidebar: function(notegroup_id){
+          	var $body = $('body');
+          	var $peroozSidebar = $('.peroozStyle #peroozSidebar');
             
-        // },
+            var $body = $('body');
+        	var $peroozSidebar = $('.peroozStyle#peroozSidebar');
+
+            /*Animate body to withdraw*/
+        	$body.animate({
+        		'width': $body.width() - $peroozSidebar.width()
+        	},this.sidebarTransitionDuration);
+
+            /*Animate sidebar to come out*/
+        	$peroozSidebar.animate({
+            	'margin-right': 0
+        	}, this.sidebarTransitionDuration,function(){
+                $peroozSidebar.attr('padding-left', '1.5em');
+                $peroozSidebar.attr('padding-right', '1.5em');
+            });
+
+        	/*If session token is not present*/
+            if (_this.sess_cookie == null){
+                $peroozSidebar.html('<button id="peroozClose" class="peroozStyle">close</button> \
+                                     <div id="peroozMain" class="peroozStyle"> \
+                                        <div id="peroozTxt" class="peroozStyle">Error! Session token expired. Please login again.</div> \
+                                     </div>');
+                $(".peroozStyle#peroozClose").on('click',function(){
+                    _this.deactivateSidebar();
+                });
+                return; 
+            }
+
+            /*Set general properties of the page*/
+            //set perooz sidebar menu
+    		$peroozSidebar.html('<div id="peroozBody" class="peroozStyle"> \
+                                     <button id="peroozClose" class ="peroozStyle">close</button> \
+                                     <div id="peroozMain" class="peroozStyle"> \
+                                        <div id="peroozMessage" class="peroozStyle"></div> \
+                                     </div> \
+                                 </div>');
+            
+            //event function for closing the sidebar
+    		$(".peroozStyle#peroozClose").on('click',function(){
+    			_this.deactivateSidebar();
+    		});
+
+    		/*Grab notes for notegroup and place in the page*/
+
+        },
         
         /*Create Note*/
         // createNote: function(selection){
@@ -177,23 +222,30 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                             /*Create get request to pull notegroup information*/
                             var xhr1 = new XMLHttpRequest(); 
                             var url1 = "https://dev.perooz.io/api/notegroups/" + notegroup_array[i];
-                            xhr1.open("GET",url,false); //synchronous request
+                            xhr1.open("GET",url1,false); //synchronous request
                             xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
                             xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
                             xhr1.setRequestHeader("Session-Token",_this.sess_cookie);
                             xhr1.onreadystatechange = function(){
                                 if (xhr1.readyState == 4){
-                                    var raw_data1 = xhr.responseText;
+                                    var raw_data1 = xhr1.responseText;
                                     var data1 =JSON.parse(raw_data1);
                                     if (xhr1.status == 200){
                                         var notegroup_info = data1.values;
-                                        console.log(notegroup_info);
+                                        var img_url = chrome.extension.getURL("images/icon_mini.png");
+                                        //NOTE: TEMP SOL'N. Search for text in each page and place icon with id - note this is temp solution. need better parser
+                                        $("p:contains('" + notegroup_info.note_text_overlap + "')").append('<button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:0px;border:0px;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNote"/>');
                                     }
                                 }
                             }
                             xhr1.send();
 
                          }
+
+                         /*Set event listener for icon click*/
+                         $('.peroozNote').on('click',function(){
+                         	_this.activateReadSidebar(this.id);
+                         });
                         
 
                     }else{
@@ -202,14 +254,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 }
             }
             xhr.send();
-
-           
-
-            /*grab text of each notegroup*/
-
-            /*Search for the text in each page*/
-
-            /*Place miniature perooz icon after text*/ 
 
         },
 
