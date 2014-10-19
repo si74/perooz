@@ -175,8 +175,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                             console.log(notegroup_array[i]);
 
                             /*Create get request to pull notegroup information*/
-                            var xh1 = new XMLHttpRequest(); 
-                            var url1 = "https://dev.perooz.io/api/notegroups/" + notegroup_array[i] + "/note_lists";
+                            var xhr1 = new XMLHttpRequest(); 
+                            var url1 = "https://dev.perooz.io/api/notegroups/" + notegroup_array[i];
                             xhr1.open("GET",url,false); //synchronous request
                             xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
                             xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -186,8 +186,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                     var raw_data1 = xhr.responseText;
                                     var data1 =JSON.parse(raw_data1);
                                     if (xhr1.status == 200){
-                                        var notegroup = data1.values;
-                                        console.log(notegroup.note_text_overlap);
+                                        var notegroup_info = data1.values;
+                                        console.log(notegroup_info);
                                     }
                                 }
                             }
