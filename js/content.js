@@ -155,10 +155,10 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             /*(1) Grab notegroup array from background page and display*/
             var xhr = new XMLHttpRequest();
             var url = "https://dev.perooz.io/api/articles/" + perooz_article_id + "/notegroup_lists"; 
-            xhr.open("GET", url, true);
+            xhr.open("GET", url, false); //note that this is a synchronous request
             xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
-            xhr.setRequestHeader("Session-Token",cookie.value);
+            xhr.setRequestHeader("Session-Token",_this.sess_cookie);
             xhr.onreadystatechange = function(){
                 if (xhr.readyState == 4){
                     var raw_data = xhr.responseText;
@@ -168,9 +168,32 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         console.log('Succesfully grabbed annotations.');
                         
                         var notegroup_array = data.values;
-                        console.log(notegroup_array);
+                        var notegroup_arrayLength = notegroup_array.length; 
 
                          /*(2) Go through each item in notegroup array*/ 
+                         for (var i=0; i< notegroup_arrayLength; i++){
+                            console.log(notegroup_array[i]);
+
+                            /*Create get request to pull notegroup information*/
+                            var xh1 = new XMLHttpRequest(); 
+                            var url1 = "https://dev.perooz.io/api/notegroups/" + notegroup_array[i] + "/note_lists";
+                            xhr1.open("GET",url,false); //synchronous request
+                            xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                            xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
+                            xhr1.setRequestHeader("Session-Token",_this.sess_cookie);
+                            xhr1.onreadystatechange = function(){
+                                if (xhr1.readyState == 4){
+                                    var raw_data1 = xhr.responseText;
+                                    var data1 =JSON.parse(raw_data1);
+                                    if (xhr1.status == 200){
+                                        var notegroup = data1.values;
+                                        console.log(notegroup.note_text_overlap);
+                                    }
+                                }
+                            }
+                            xhr1.send();
+
+                         }
                         
 
                     }else{
@@ -320,7 +343,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 }else if(request.method == "removeSess"){
                     if (_this.sess_cookie != null){
                         _this.sess_cookie = null;
+                    }
                     sendResponse({message: "OK"});
+
 
                 //if message is not legitimate
                	}else{
