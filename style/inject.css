@@ -20,10 +20,12 @@
 /*Close button style*/
 .peroozStyle#peroozClose{
 	display:inline-block;
-	font-size:1em;
+	font-size:0.6em;
 	color:#ff6600;
-	background-color:#fff; 
-
+	background-color:#fff;
+	border:1px solid #ff6600;
+	height:2.5em;
+	width:5em;
 }
 
 .peroozStyle#peroozBody{
@@ -35,6 +37,7 @@
 	padding-left:1.5em;
 	padding-right:1.5em;
 	padding-top:150px;
+	width:330px;
 }
 
 .peroozStyle#peroozTxt{
@@ -42,8 +45,30 @@
 	font-style:italic;
 }
 
-.peroozStyle#peroozNote{
+.peroozStyle#peroozNotegroup{
+	cursor:pointer;
+}
 
+.peroozStyle#peroozNote{
+	width:320px;
+	border: 1px solid #ff6600;
+	border-radius: 4px;
+}
+
+.peroozStyle#peroozNoteInline{
+	width:310px;
+	font-style:italic;
+	font-weight:bold;
+	color:#17c6fd;
+	font-size:0.8em;
+}
+
+.peroozStyle#peroozNoteText{
+	width:310px;
+	font-style:normal;
+	font-weight:normal;
+	color:#000;
+	font-size:0.9em;
 }
 
 /*Perooz annotation details*/
@@ -74,4 +99,6 @@
 .peroozStyle#perooz-mouseicon.active {
 	display: inline-block;
 }
+
+
 

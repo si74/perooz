@@ -182,8 +182,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                             			var note = data1.values;
 
-                            			console.log(note_inline);
-
                             			var note_inline = note.inline_text;
                             			var note_text =  note.note_text;
                             			
@@ -192,9 +190,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                       					//display note and contributor details
                       					$('#peroozMain').append('<div id="' + notelist_array[i] + '" class="peroozStyle peroozNote"> \
-                      												<div id="peroozNoteInline" class="peroozStyle">' + note_inline + '<div> <br/><br/> \
-                      												<div id="peroozNoteText" class="peroozStyle">' + note_text + '<div> <br/><br/> \
-                      												<br/> \
+                      												<div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> <br/><br/> \
+                      												<div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> <br/><br/> \
                       										    </div>');
 
                       					//add an line image afer note if not the last in the notegroup
