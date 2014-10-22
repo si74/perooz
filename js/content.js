@@ -20,7 +20,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 		constructor : Perooz,
 		sidebarTransitionDuration : 400,
         $mouseicon : null,
-        sess_cookie: null, 
+        sess_cookie: null,
+        pz_user_id: null,
+        pz_contributor_id: null, 
         mouseiconPosition: {
             top: -9999, 
             left: -9999
@@ -88,8 +90,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             //submit annotation to temp db
     		$(".peroozStyle#peroozSubmit").on('click',function(){
     			if ($(".peroozStyle#peroozNote").val().length > 0){
-                //    _this.createNote(selection);
-                    $(".peroozStyle#peroozMessage").html('Annotation successfully created!')
+    				var annotation = $(".peroozStyle#peroozNote").val().length;
+                    var result = _this.createNote(selection,annotation);
+                    //$(".peroozStyle#peroozMessage").html('Annotation successfully created!')
     			}else{
     				$(".peroozStyle#peroozMessage").html('Annotation cannot be blank.');
     			}
@@ -211,44 +214,49 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         },
         
         /*Create Note*/
-        // createNote: function(selection){
-        //     var $body = $('body');
-        //     var $peroozSidebar = $(".peroozStyle#peroozSidebar");
+        createNote: function(selection,note){
+            var $body = $('body');
+            var $peroozSidebar = $(".peroozStyle#peroozSidebar");
 
-        //     var message = '';
-        //     var in_db = false;
+            var message = '';
+            var in_db = false;
 
-        //     /*Retrieve session token*/
-        //     
+            /*Retrieve session token*/
+            if (!_this.sess_cookie){
+            	$(".peroozStyle#peroozMessage").html('Session token expired. Please refresh page.');
+            	return;
+            }
 
-        //         /*Check if article in db*/
-        //         var perooz_article_id = $peroozSidebar.has(".peroozStyle#perooz_article_id").innerText()
-        //         if (!perooz_article_id){ //if not in db, add current article
-        //             //check if source in db
-                    
-        //             //check if author in db
-        //         }
+            /*Check if article in db*/
+            var perooz_article_id = $peroozSidebar.has(".peroozStyle#perooz_article_id").innerText()
+            if (!perooz_article_id){ //if not in db, add current article to db
+                
+            }
 
-        //         /*Create annotation*/
-        //         xhr = new XMLHttpRequest();
-        //         var url = "https://dev.perooz.io/api/articles"; 
-        //         xhr.open("POST", url, true);
-        //         xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-        //         xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
-        //         xhr.setRequestHeader("Session-Token",cookie.value);
-        //         xhr.onreadystatechange = function(){
-        //             if (xhr.readyState == 4){
-        //                 if (xhr.status == 200){
-        //                     message = 'Annotation successfully created!';
-        //                 }else{
-        //                     message = 'Error creating annotation. Please try again.';
-        //                 }
-        //             }
-        //         }
-        //         xhr.send("");
+            /*Grab contributor id from db*/
 
-        //     $(".peroozStyle#peroozMain").html('<div id="peroozMessage" class="peroozStyle">' + message + '</div>');
-        // },
+
+            /*Create annotation*/
+            // xhr = new XMLHttpRequest();
+            // var url = "https://dev.perooz.io/api/articles"; 
+            // xhr.open("POST", url, false);
+            // xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            // xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+            // xhr.setRequestHeader("Session-Token",cookie.value);
+            // xhr.onreadystatechange = function(){
+            //     if (xhr.readyState == 4){
+            //         if (xhr.status == 200){
+            //             message = 'Annotation successfully created!';
+            //         }else{
+            //             message = 'Error creating annotation. Please try again.';
+            //         }
+            //     }
+            // }
+            // xhr.send("");
+
+            // $(".peroozStyle#peroozMain").html('<div id="peroozMessage" class="peroozStyle">' + message + '</div>');
+            
+        },
 
         /*insert Annotations into the Page*/
         setNotes: function(perooz_article_id){
@@ -452,7 +460,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         _this.sess_cookie = null;
                     }
                     sendResponse({message: "OK"});
-
 
                 //if message is not legitimate
                	}else{
