@@ -65,6 +65,33 @@ $(document).ready(function(){
 
 			/*Set logout function event*/
 			$("#logout").on('click',function(){
+
+				/*Chrome get cookie*/
+				/*Remove session token from database*/
+				chrome.cookies.get({'url':'https://dev.perooz.io/api','name':"session_token"},function(cookie)){
+													
+					if (!cookie){
+						return;
+					}
+
+					/*Remove session token from db*/
+					var xhr2 = new XMLHttpRequest();
+					var url2 = "https://dev.perooz.io/api/auth/remove_sess.php";
+					xhr2.open("GET",url2,false); //synchronous 
+					xhr2.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+					xhr2.setRequestHeader("Client-Id",client_id);
+					xhr2.setRequestHeader("Session-Token",cookie.value);
+
+					xhr2.onreadystatechange = function(){
+						if (xhr2.readyState == 4 && xhr2.status ==200){
+							console.log('cookie removed');
+						}
+					}
+					xhr2.send();
+
+				});
+
+				/*Remove chrome session cookie*/
 				chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
 					$('.main').html("Logged out! Please refresh page to log back in.");
 				
@@ -79,6 +106,7 @@ $(document).ready(function(){
 					});
 
 				});
+
 			});
 
 		}else{
@@ -126,7 +154,9 @@ $(document).ready(function(){
 							$sel = $('.message');
 
 							if (input_validation(username,$sel) && input_validation(pwd,$sel)){ 
+								
 								var params = "uname=" + username + "&pwd=" + pwd;  
+								
 								xhr1 = new XMLHttpRequest(); 
 								var url1 = "https://dev.perooz.io/api/auth/login.php"
 								xhr1.open("POST",url1,true);
@@ -138,7 +168,7 @@ $(document).ready(function(){
 									if (xhr1.readyState == 4){
 										var raw_data = xhr1.responseText;
 										var data=JSON.parse(raw_data);
-										if (xhr.status == 200 && data.message == 'OK'){
+										if (xhr1.status == 200 && data.message == 'OK'){
 											var sess_token = data.session_token;
 											chrome.cookies.set({'url': 'https://dev.perooz.io/api','name':'session_token','value':sess_token});
 
@@ -159,10 +189,36 @@ $(document).ready(function(){
 
 											/*Set logout button listener*/
 											$("#logout").on('click',function(){
-												chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
-													$('.main').html("Logged out! Please refresh page to log back in.");	
 
-													/*Send message to remove session token*/
+												/*Get chrome cookie and remove sesson token from db*/
+												chrome.cookies.get({'url':'https://dev.perooz.io/api','name':"session_token"},function(cookie)){
+													
+													if (!cookie){
+														return;
+													}
+
+													/*Remove session token from db*/
+													var xhr2 = new XMLHttpRequest();
+													var url2 = "https://dev.perooz.io/api/auth/remove_sess.php";
+													xhr2.open("GET",url2,false); //synchronous 
+													xhr2.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+													xhr2.setRequestHeader("Client-Id",client_id);
+													xhr2.setRequestHeader("Session-Token",cookie.value);
+
+													xhr2.onreadystatechange = function(){
+														if (xhr2.readyState == 4 && xhr.status ==200){
+															console.log('cookie removed');
+														}
+													}
+													xhr2.send();
+
+												});
+
+												/*Remove chrome cookie from browser*/
+												chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
+													$('.main').html("Logged out! Please refresh page to log back in.");
+
+													/*Send message to remove session token from background page*/
 													chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 														chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "popup.js"},function(response){
 															console.log('message sent');
