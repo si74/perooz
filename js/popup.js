@@ -68,7 +68,7 @@ $(document).ready(function(){
 
 				/*Chrome get cookie*/
 				/*Remove session token from database*/
-				chrome.cookies.get({'url':'https://dev.perooz.io/api','name':"session_token"},function(cookie)){
+				chrome.cookies.get({'url':'https://dev.perooz.io/api','name':"session_token"},function(cookie){
 													
 					if (!cookie){
 						return;
@@ -191,7 +191,7 @@ $(document).ready(function(){
 											$("#logout").on('click',function(){
 
 												/*Get chrome cookie and remove sesson token from db*/
-												chrome.cookies.get({'url':'https://dev.perooz.io/api','name':"session_token"},function(cookie)){
+												chrome.cookies.get({'url':'https://dev.perooz.io/api','name':"session_token"},function(cookie){
 													
 													if (!cookie){
 														return;
