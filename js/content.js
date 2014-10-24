@@ -417,7 +417,16 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         },
 
         /*--------------------------------------------------------*/
+        /*SET OF FUNCTIONS REMOVING THE MOUSEUP*/
+        removeObservers: function(){
 
+        },
+
+        removeMouseicon: function(){
+
+        },
+
+        /*--------------------------------------------------------*/
         /*Set message listener to listen to messages*/
 		setupReceiver : function() {
             chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -429,6 +438,13 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                     _this.attachObservers(); 
                     sendResponse({message: "OK"});
                 
+                //remove mouseicon listener
+                }else if(request.method == "removeMouseiconEvent"){
+                    console.log('removeMouseupevent');
+                    _this.removeMouseicon(); 
+                    _this.removeObservers();
+                    sendResponse({message: "OK"});
+
                 //annotation creation message
             	}else if (request.method == "getSelection"){
             		console.log('message received');
