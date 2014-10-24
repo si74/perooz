@@ -105,6 +105,22 @@ $(document).ready(function(){
 						});
 					});
 
+					/*Send message to remove Mouseicon event in page*/
+					chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+						chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "background.js"},function(response){
+							console.log('message sent');
+							// if (response.message != 'OK'){
+							// 	console.log(response.message);
+							// }
+						});
+					});
+
+					/*Remove chrome context menu*/
+					chrome.contextMenus.removeAll(function(){
+						//cmid = null;
+						console.log('Perooz menu removed.');
+					});
+
 				});
 
 			});
@@ -228,10 +244,26 @@ $(document).ready(function(){
 														});
 													});
 
+													/*Send message to remove Mouseicon event in page*/
+													chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+														chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "popup.js"},function(response){
+															console.log('message sent');
+															// if (response.message != 'OK'){
+															// 	console.log(response.message);
+															// }
+														});
+													});
+
+													/*Remove chrome context menu*/
+													chrome.contextMenus.removeAll(function(){
+														//cmid = null;
+														console.log('Perooz menu removed.');
+													});
+
 												});
 											});
 
-											/*Send message to set session cookie in the content script of the page*/
+											/*Send message to set session cookie in the content script of the page------------------------------*/
 											chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 												chrome.tabs.sendMessage(tabs[0].id,{method: "setSess",sess_cookie: sess_token,from: "popup.js"},function(response){
 													console.log('message sent');
@@ -240,6 +272,37 @@ $(document).ready(function(){
 													// }
 												});
 											});
+
+											/*Set chrome context menu and Event Listener--------------------------------------------------------*/
+											chrome.contextMenus.create({"title": "Create Perooz Annotation", "id":"p_menu","contexts":["all"]});
+
+											/*Set the chrome context menu event listener*/
+											chrome.contextMenus.onClicked.addListener(function(){
+
+												/*Send message to content script to retrieve selected string from activetab*/
+												chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+													chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
+														console.log('menu click message sent');
+														// if (response.message != 'OK'){
+														// 	console.log(response.message);
+														// }
+													});
+												});
+												
+											});
+
+											/*Send message to background page to setup mouseicon event--------------------------------------------*/
+
+											chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+												chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent",from: "popup.js"},function(response){
+													console.log('message sent');
+													// if (response.message != 'OK'){
+													// 	console.log(response.message);
+													// }
+												});
+											});
+
+											/*-----------------------------------------------------------------------------------------------------*/
 
 										}else{
 											$sel.html(data.message);

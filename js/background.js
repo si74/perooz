@@ -1,5 +1,5 @@
 /*ID for context menu entry*/
-var cmid; 
+//var cmid; 
  
 /*Add listener for expired session token*/
 chrome.cookies.onChanged.addListener(function(changeInfo){
@@ -28,7 +28,8 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 
 			/*Remove chrome context menu*/
 			chrome.contextMenus.removeAll(function(){
-				cmid = null;
+				//cmid = null;
+				console.log('Perooz menu removed.');
 			});
 
 		}
@@ -45,20 +46,20 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 			if (!cookie){
 				
 				/*Send message to content script to show a reminder to log in*/
-				//chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+				chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 					chrome.tabs.sendMessage(tabs[0].id,{method: "setReminder", from: "background.js"},function(response){
 						if (typeof(response) != 'OK'){
 							console.log(response.message);
 						}
 					});
-				//});
+				});
 
 				/*If chrome context menu does exist, remove it*/
-				if (cmid){
-					chrome.contextMenus.removeAll(function(){
-						cmid = null;
-					});
-				}
+				// if (cmid){
+				// 	chrome.contextMenus.removeAll(function(){
+				// 		cmid = null;
+				// 	});
+				// }
 				return;
 			}
 
@@ -73,27 +74,27 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 			});
 
 			/*(3) Set the chrome context menu*/
-			if (!cmid){
+			// if (!cmid){
 				
-				chrome.contextMenus.create({"title": "Create Perooz Annotation", "id":"p_menu","contexts":["all"]});
+			// 	chrome.contextMenus.create({"title": "Create Perooz Annotation", "id":"p_menu","contexts":["all"]});
 
-				/*Set the chrome context menu event listener*/
-				chrome.contextMenus.onClicked.addListener(function(){
+			// 	/*Set the chrome context menu event listener*/
+			// 	chrome.contextMenus.onClicked.addListener(function(){
 
-					/*Send message to content script to retrieve selected string from activetab*/
-					chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-						chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
-							console.log('menu click message sent');
-							// if (response.message != 'OK'){
-							// 	console.log(response.message);
-							// }
-						});
-					});
+			// 		/*Send message to content script to retrieve selected string from activetab*/
+			// 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			// 			chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
+			// 				console.log('menu click message sent');
+			// 				// if (response.message != 'OK'){
+			// 				// 	console.log(response.message);
+			// 				// }
+			// 			});
+			// 		});
 					
-				});
+			// 	});
 
-				cmid = true;
-			}
+			// 	cmid = true;
+			// }
 
 			/*(4) Set event listener for check for text selection - send message to content script to setup listener*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
