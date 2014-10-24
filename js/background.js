@@ -5,6 +5,10 @@ var cmid;
 // var onClickHandler = function(){
 //  	alert('clicked!');
 // }
+// 
+chrome.cookies.onchanged.addListener(function(obj){
+
+});
 
 /*On a new chrome tab being opened*/
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
