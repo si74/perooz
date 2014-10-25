@@ -9,6 +9,9 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 		chrome.tabs.query({}, function(tabs) {
 			for (var i=0; i<tabs.length; ++i) {
 
+				/*Remove all the pageaction icons*/
+				chrome.pageAction.hide(tabs[i].id);
+
 				/*Send message to remove session token*/
 				chrome.tabs.sendMessage(tabs[i].id,{method: "removeSess",from: "background.js"},function(response){
 					console.log('remove sessiontoken message sent');
@@ -39,9 +42,9 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 
 		/*Remove chrome context menu*/
 		chrome.contextMenus.removeAll(function(){
-			//cmid = null;
 			console.log('Perooz menu removed.');
 		});
+
 
 	}
 });
@@ -114,6 +117,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
 								//extract the perooz id of the article
 								var obj = data.values; 
+
+								//show the page action in relevant tab
+								chrome.pageAction.show(tabs[i].id);
 
 								//send message to content script with relevant information
 								chrome.tabs.sendMessage(tabs[i].id, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {
@@ -202,6 +208,9 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 						//extract the perooz id of the article
 						var obj = data.values; 
+
+						//show the page action in relevant tab
+						chrome.pageAction.show(tabs[i].id);
 
 						//send message to content script with relevant information
 						chrome.tabs.sendMessage(tabId, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {

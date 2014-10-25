@@ -7,6 +7,12 @@
    	"default_icon": "images/icon.png",
    	"default_popup": "popup.html"
    	}, 
+  "page_action" :{
+      "default_icon": {
+        "19": "images/icon.png",
+        "38": "images/icon.png"
+      }
+  },
   "background": {
   	"scripts": ["js/jquery_1.11.0.js","js/purl.js","js/background.js"],
 	  "persistent" : true
