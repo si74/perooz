@@ -419,11 +419,15 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         /*--------------------------------------------------------*/
         /*SET OF FUNCTIONS REMOVING THE MOUSEUP*/
         removeObservers: function(){
-
+            /*Turn off all window event listeners*/
+            $(window).off('mouseup',function(){
+                _this.removeMouseicon(); 
+            });
         },
 
         removeMouseicon: function(){
-
+            $('body').remove('.peroozStyle#perooz-mouseicon');
+            _this.$mouseicon = null;
         },
 
         /*--------------------------------------------------------*/
@@ -440,8 +444,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 
                 //remove mouseicon listener
                 }else if(request.method == "removeMouseiconEvent"){
-                    console.log('removeMouseupevent');
-                    _this.removeMouseicon(); 
+                    console.log('removeMouseupevent'); 
                     _this.removeObservers();
                     sendResponse({message: "OK"});
 
