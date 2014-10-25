@@ -99,7 +99,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 					xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 					xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
 					xhr.setRequestHeader("Session-Token",cookie.value);
-
+					
 					/*(5) If url is in database, call fxns from content script to display all annotation links*/
 					xhr.onreadystatechange = function(){
 						if (xhr.readyState == 4){
@@ -111,6 +111,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
 								//extract the perooz id of the article
 								var obj = data.values; 
+								console.log(obj.perooz_article_id);
 
 								//send message to content script with relevant information
 								chrome.tabs.sendMessage(tabs[i].id, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {

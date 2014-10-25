@@ -355,9 +355,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
         /*Remove article id and annotations from article*/
         removeNotes: function(){
-            var $peroozSidebar = $(".peroozStyle#peroozSidebar");
-            $peroozSidebar.remove(".peroozStyle#perooz_article_id");
-
+            $(".peroozStyle#perooz_article_id").remove();
             $(".peroozNotegroup").remove(); 
         },
 
@@ -436,7 +434,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         },
 
         removeMouseicon: function(){
-            $('body').remove('.peroozStyle#perooz-mouseicon');
+            $('.peroozStyle#perooz-mouseicon').remove();
             _this.$mouseicon = null;
         },
 
@@ -475,6 +473,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 //insert notes into DOM 
                	}else if(request.method == "setNotes"){
                     _this.setNotes(request.perooz_article_id);
+                    console.log('setNotes');
                     sendResponse({message: "OK"});
 
                 //read notes
