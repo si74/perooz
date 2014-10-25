@@ -28,6 +28,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             left: -9999
         },
 
+        /*--------------------------------------------------------------*/
         /*Open sidebar for note creation*/
 	    activateCreateSidebar: function(selection){
         	var $body = $('body');
@@ -212,7 +213,31 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             xhr.send();
 
         },
-        
+
+        /*Hide sidebar*/
+        deactivateSidebar: function(){
+            var $body = $('body');
+        	var $peroozSidebar = $(".peroozStyle#peroozSidebar");
+            var $peroozBody = $(".peroozStyle#peroozBody");
+
+        	$peroozBody.remove();
+
+            //animate body to fill page
+        	$body.animate({
+        		'width': '100%'
+        	},this.sidebarTransitionDuration);
+
+            //animate sidebar to disappear
+        	$peroozSidebar.animate({
+            	'margin-right': '-360px'
+        	}, this.sidebarTransitionDuration,function(){
+                $peroozSidebar.attr('padding-left', '0');
+                $peroozSidebar.attr('padding-right', '0');
+            });
+        },
+
+        /*--------------------------------------------------------------*/
+        /*SET OF FUNCTIONS RELATING TO ANNOTATIONS*/
         /*Create Note*/
         createNote: function(selection,note){
             var $body = $('body');
@@ -223,8 +248,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*Retrieve session token*/
             if (!_this.sess_cookie){
-            	$(".peroozStyle#peroozMessage").html('Session token expired. Please refresh page.');
-            	return;
+                $(".peroozStyle#peroozMessage").html('Session token expired. Please refresh page.');
+                return;
             }
 
             /*Check if article in db*/
@@ -315,7 +340,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                          /*Set event listener for icon click*/
                          $('.peroozNotegroup').on('click',function(){
-                         	_this.activateReadSidebar(this.id);
+                            _this.activateReadSidebar(this.id);
                          });
                         
 
@@ -328,26 +353,12 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
         },
 
-        /*Hide sidebar*/
-        deactivateSidebar: function(){
-            var $body = $('body');
-        	var $peroozSidebar = $(".peroozStyle#peroozSidebar");
-            var $peroozBody = $(".peroozStyle#peroozBody");
+        /*Remove article id and annotations from article*/
+        removeNotes: function(){
+            var $peroozSidebar = $(".peroozStyle#peroozSidebar");
+            $peroozSidebar.remove(".peroozStyle#perooz_article_id");
 
-        	$peroozBody.remove();
-
-            //animate body to fill page
-        	$body.animate({
-        		'width': '100%'
-        	},this.sidebarTransitionDuration);
-
-            //animate sidebar to disappear
-        	$peroozSidebar.animate({
-            	'margin-right': '-360px'
-        	}, this.sidebarTransitionDuration,function(){
-                $peroozSidebar.attr('padding-left', '0');
-                $peroozSidebar.attr('padding-right', '0');
-            });
+            $(".peroozNotegroup").remove(); 
         },
 
         /*SET OF FUNCTIONS RELATING TO MOUSEUP--------------------*/
@@ -471,6 +482,11 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                     _this.activateReadSidebar;
                     sendResponse({message: "OK"});
                 
+                //remove annotations
+                }else if(request.method == "removeNotes"){
+                    _this.removeNotes();
+                    sendResponse({message: "OK"});
+
                 //set reminder to log in to page
                	}else if(request.method == "setReminder"){
                     console.log('HAPPENED');

@@ -215,24 +215,23 @@ $(document).ready(function(){
 												for (var i=0; i<tabs.length; ++i) {
 
 													/*Send message to context script to set session cookie of the page*/
-													chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+											
 														chrome.tabs.sendMessage(tabs[i].id,{method: "setSess",sess_cookie: sess_token,from: "popup.js"},function(response){
 															console.log('message sent');
 															// if (response.message != 'OK'){
 															// 	console.log(response.message);
 															// }
 														});
-													});
+
 
 													/*Send message to content script page to setup mouseicon event*/
-													chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 														chrome.tabs.sendMessage(tabs[i].id,{method: "setupMouseiconEvent",from: "popup.js"},function(response){
 															console.log('mouseiconsetup message sent');
 															// if (response.message != 'OK'){
 															// 	console.log(response.message);
 															// }
 														});
-													});
+
 
 												}
 											});

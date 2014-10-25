@@ -27,7 +27,12 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 				});
 
 				/*Remove annotations*/
-				
+				chrome.tabs.sendMessage(tabs[i].id,{method: "removeNotes",from: "background.js"},function(response){
+					console.log('remove notes message sent');
+					// if (response.message != 'OK'){
+					// 	console.log(response.message);
+					// }
+				});
 
 			}
 		});
@@ -99,30 +104,8 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				});
 			});
 
-			/*(3) Set the chrome context menu*/
-			// if (!cmid){
-				
-			// 	chrome.contextMenus.create({"title": "Create Perooz Annotation", "id":"p_menu","contexts":["all"]});
 
-			// 	/*Set the chrome context menu event listener*/
-			// 	chrome.contextMenus.onClicked.addListener(function(){
-
-			// 		/*Send message to content script to retrieve selected string from activetab*/
-			// 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-			// 			chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
-			// 				console.log('menu click message sent');
-			// 				// if (response.message != 'OK'){
-			// 				// 	console.log(response.message);
-			// 				// }
-			// 			});
-			// 		});
-					
-			// 	});
-
-			// 	cmid = true;
-			// }
-
-			/*(4) Set event listener for check for text selection - send message to content script to setup listener*/
+			/*(3) Set event listener for check for text selection - send message to content script to setup listener*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent", from: "background.js"},function(response){
 					console.log('message sent');
@@ -132,7 +115,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				});
 			});
 
-			/*(5) Grab the url from the current tab*/
+			/*(4) Grab the url from the current tab*/
 			var tab_url = tab.url;
 			var purl_url = $.url(tab_url);
 			var url_adjusted = tab_url.replace((purl_url.attr('protocol')+'://'),"");
@@ -145,7 +128,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 			xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
 			xhr.setRequestHeader("Session-Token",cookie.value);
 
-			/*(6) If url is in database, call fxns from content script to display all annotation links*/
+			/*(5) If url is in database, call fxns from content script to display all annotation links*/
 			xhr.onreadystatechange = function(){
 				if (xhr.readyState == 4){
 					var raw_data = xhr.responseText;
@@ -156,8 +139,6 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 						//extract the perooz id of the article
 						var obj = data.values; 
-						// var msg = {message:'setNotes',
-						// 		   perooz_article_id: obj.perooz_article_id};
 
 						//send message to content script with relevant information
 						chrome.tabs.sendMessage(tabId, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {
