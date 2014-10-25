@@ -95,23 +95,25 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 					/*Prep the the xmlhttprequest*/
 					var xhr = new XMLHttpRequest();
 					var url = "https://dev.perooz.io/api/search/articles?url=" + encodeURIComponent(url_adjusted); 
-					xhr.open("GET", url, true);
+					xhr.open("GET", url, false); //note the for loop won't work unless synchronous
 					xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 					xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
 					xhr.setRequestHeader("Session-Token",cookie.value);
-					
+
 					/*(5) If url is in database, call fxns from content script to display all annotation links*/
 					xhr.onreadystatechange = function(){
 						if (xhr.readyState == 4){
 							var raw_data = xhr.responseText;
 							var data=JSON.parse(raw_data);
 
+							console.log(url);
+							console.log(xhr.status);
+
 							//If article successfully exists in the db
 							if (xhr.status == 200){
 
 								//extract the perooz id of the article
 								var obj = data.values; 
-								console.log(obj.perooz_article_id);
 
 								//send message to content script with relevant information
 								chrome.tabs.sendMessage(tabs[i].id, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {
