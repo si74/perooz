@@ -3,36 +3,40 @@
  
 /*Add listener for expired session token*/
 chrome.cookies.onChanged.addListener(function(changeInfo){
-	if (changeInfo.cause == "expired"){
-		if (changeInfo.cookie.name == "session_token"){
+	if (changeInfo.cookie.name == "session_token" && changeInfo.removed){
 
-			/*Send message to remove session token*/
-			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "background.js"},function(response){
-					console.log('remove sessiontoken message sent');
-					// if (response.message != 'OK'){
-					// 	console.log(response.message);
-					// }
+		/*Query through all chrome tabs*/
+		//chrome.tabs.query({}, function(tabs) {
+		//	for (var i=0; i<tabs.length; ++i) {
+
+				/*Send message to remove session token*/
+				chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+					chrome.tabs.sendMessage(tabs[i].id,{method: "removeSess",from: "background.js"},function(response){
+						console.log('remove sessiontoken message sent');
+						// if (response.message != 'OK'){
+						// 	console.log(response.message);
+						// }
+					});
 				});
-			});
 
-			/*Send message to remove Mouseicon event in page*/
-			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "background.js"},function(response){
-					console.log('remove mouseicon message sent');
-					// if (response.message != 'OK'){
-					// 	console.log(response.message);
-					// }
+				/*Send message to remove Mouseicon event in page*/
+				chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+					chrome.tabs.sendMessage(tabs[i].id,{method: "removeMouseiconEvent",from: "background.js"},function(response){
+						console.log('remove mouseicon message sent');
+						// if (response.message != 'OK'){
+						// 	console.log(response.message);
+						// }
+					});
 				});
-			});
+		//	}
+		//}
 
-			/*Remove chrome context menu*/
-			chrome.contextMenus.removeAll(function(){
-				//cmid = null;
-				console.log('Perooz menu removed.');
-			});
+		/*Remove chrome context menu*/
+		chrome.contextMenus.removeAll(function(){
+			//cmid = null;
+			console.log('Perooz menu removed.');
+		});
 
-		}
 	}
 });
 

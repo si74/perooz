@@ -95,31 +95,31 @@ $(document).ready(function(){
 				chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
 					$('.main').html("Logged out! Please refresh page to log back in.");
 				
-					/*Send message to remove session token*/
-					chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-						chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "popup.js"},function(response){
-							console.log('message sent');
-							// if (response.message != 'OK'){
-							// 	console.log(response.message);
-							// }
-						});
-					});
+					// /*Send message to remove session token*/
+					// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+					// 	chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "popup.js"},function(response){
+					// 		console.log('message sent');
+					// 		// if (response.message != 'OK'){
+					// 		// 	console.log(response.message);
+					// 		// }
+					// 	});
+					// });
 
-					/*Send message to remove Mouseicon event in page*/
-					chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-						chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "background.js"},function(response){
-							console.log('message sent');
-							// if (response.message != 'OK'){
-							// 	console.log(response.message);
-							// }
-						});
-					});
+					// /*Send message to remove Mouseicon event in page*/
+					// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+					// 	chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "background.js"},function(response){
+					// 		console.log('message sent');
+					// 		// if (response.message != 'OK'){
+					// 		// 	console.log(response.message);
+					// 		// }
+					// 	});
+					// });
 
-					/*Remove chrome context menu*/
-					chrome.contextMenus.removeAll(function(){
-						//cmid = null;
-						console.log('Perooz menu removed.');
-					});
+					// /*Remove chrome context menu*/
+					// chrome.contextMenus.removeAll(function(){
+					// 	//cmid = null;
+					// 	console.log('Perooz menu removed.');
+					// });
 
 				});
 
@@ -234,39 +234,52 @@ $(document).ready(function(){
 												chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
 													$('.main').html("Logged out! Please refresh page to log back in.");
 
-													/*Send message to remove session token from background page*/
-													chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-														chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "popup.js"},function(response){
-															console.log('message sent');
-															// if (response.message != 'OK'){
-															// 	console.log(response.message);
-															// }
-														});
-													});
+													// /*Send message to remove session token from content script*/
+													// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+													// 	chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "popup.js"},function(response){
+													// 		console.log('message sent');
+													// 		// if (response.message != 'OK'){
+													// 		// 	console.log(response.message);
+													// 		// }
+													// 	});
+													// });
 
-													/*Send message to remove Mouseicon event in page*/
-													chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-														chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "popup.js"},function(response){
-															console.log('message sent');
-															// if (response.message != 'OK'){
-															// 	console.log(response.message);
-															// }
-														});
-													});
+													// /*Send message to remove Mouseicon from content script*/
+													// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+													// 	chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "popup.js"},function(response){
+													// 		console.log('message sent');
+													// 		// if (response.message != 'OK'){
+													// 		// 	console.log(response.message);
+													// 		// }
+													// 	});
+													// });
 
-													/*Remove chrome context menu*/
-													chrome.contextMenus.removeAll(function(){
-														//cmid = null;
-														console.log('Perooz menu removed.');
-													});
+													// /*Remove chrome context menu*/
+													// chrome.contextMenus.removeAll(function(){
+													// 	//cmid = null;
+													// 	console.log('Perooz menu removed.');
+													// });
 
 												});
 											});
-
-											/*Send message to set session cookie in the content script of the page-----------------------------------*/
+								
+											/*Send message to background page to set session cookie in the content script of the page*/
 											chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 												chrome.tabs.sendMessage(tabs[0].id,{method: "setSess",sess_cookie: sess_token,from: "popup.js"},function(response){
 													console.log('message sent');
+													// if (response.message != 'OK'){
+													// 	console.log(response.message);
+													// }
+												});
+											});
+
+											/*-----------------------------------------------------------------------------------------------------*/
+											
+
+											/*Send message to content script page to setup mouseicon event*/
+											chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+												chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent",from: "popup.js"},function(response){
+													console.log('mouseiconsetup message sent');
 													// if (response.message != 'OK'){
 													// 	console.log(response.message);
 													// }
@@ -279,16 +292,6 @@ $(document).ready(function(){
 												// if (response.message != 'OK'){
 												// 	console.log(response.message);
 												// }
-											});
-
-											/*Send message to content script page to setup mouseicon event--------------------------------------------*/
-											chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-												chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent",from: "popup.js"},function(response){
-													console.log('mouseiconsetup message sent');
-													// if (response.message != 'OK'){
-													// 	console.log(response.message);
-													// }
-												});
 											});
 
 											/*-----------------------------------------------------------------------------------------------------*/

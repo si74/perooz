@@ -363,7 +363,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
         /*Set listener for mouseup*/
         attachObservers: function(){
-            console.log('addedmouseup');
             $(window).on("mouseup.peroozHandler",function(){
                 var selection = window.getSelection(); 
 
@@ -422,7 +421,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         removeObservers: function(){
             /*Turn off all window event listeners*/
             console.log('wohoo!');
-            $(window).off("mouseup.peroozHandler","**");
+            $(window).off("mouseup.peroozHandler");
         },
 
         removeMouseicon: function(){
@@ -435,7 +434,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         setReminder: function(){
 
         },
-        
+
         /*--------------------------------------------------------*/
         /*Set message listener to listen to messages*/
 		setupReceiver : function() {
