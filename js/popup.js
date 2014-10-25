@@ -248,7 +248,12 @@ $(document).ready(function(){
 											});
 
 											/*Send message to background page to check all chrome tabs whether in db*/
-
+											chrome.runtime.sendMessage({method: "checkTabURL",from: "popup.js"},function(response){
+												console.log('tabUrl check message sent');
+												// if (response.message != 'OK'){
+												// 	console.log(response.message);
+												// }
+											});
 
 											/*-----------------------------------------------------------------------------------------------------*/
 

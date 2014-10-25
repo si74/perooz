@@ -48,6 +48,8 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 
 /*Add listener from chrome events*/
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+
+	//if message received to set up context menu
 	if (request.method == "setupContextMenu"){
 		console.log('listener here');
 
@@ -70,7 +72,65 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 		});
 
 		sendResponse({message:"OK"});
+
+	//if message received to check tab urls and insert annotations accordingly
+	}else if(request.method == "checkTabURL"){
+
+		/*check for presence of session cookie*/
+		chrome.cookies.get({'url': 'https://dev.perooz.io/api','name':'session_token'}, function(cookie){
+			
+			if (!cookie){
+				return
+			}
+				
+			//query through all tabs
+			chrome.tabs.query({}, function(tabs) {
+				for (var i=0; i<tabs.length; ++i) {
+
+					/*Grab the url from the current tab*/
+					var tab_url = tabs[i].url;
+					var purl_url = $.url(tab_url);
+					var url_adjusted = tab_url.replace((purl_url.attr('protocol')+'://'),"");
+
+					/*Prep the the xmlhttprequest*/
+					var xhr = new XMLHttpRequest();
+					var url = "https://dev.perooz.io/api/search/articles?url=" + encodeURIComponent(url_adjusted); 
+					xhr.open("GET", url, true);
+					xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+					xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+					xhr.setRequestHeader("Session-Token",cookie.value);
+
+					/*(5) If url is in database, call fxns from content script to display all annotation links*/
+					xhr.onreadystatechange = function(){
+						if (xhr.readyState == 4){
+							var raw_data = xhr.responseText;
+							var data=JSON.parse(raw_data);
+
+							//If article successfully exists in the db
+							if (xhr.status == 200){
+
+								//extract the perooz id of the article
+								var obj = data.values; 
+
+								//send message to content script with relevant information
+								chrome.tabs.sendMessage(tabs[i].id, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {
+		        					//if (response.message !== 'OK') {
+				            			console.log(response.message);
+		        					//}
+			        			});
+
+							}
+						}
+					}
+					xhr.send();
+
+				}
+			});
+
+		});
+
 	}
+
 });
 
 /*On a new chrome tab being opened*/
