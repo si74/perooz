@@ -363,7 +363,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
         /*Set listener for mouseup*/
         attachObservers: function(){
-            $(window).on('mouseup',function(){
+            console.log('addedmouseup');
+            $(window).on("mouseup.peroozHandler",function(){
                 var selection = window.getSelection(); 
 
                 //if text in a range is selected
@@ -420,9 +421,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         /*SET OF FUNCTIONS REMOVING THE MOUSEUP*/
         removeObservers: function(){
             /*Turn off all window event listeners*/
-            $(window).off('mouseup',function(){
-                _this.removeMouseicon(); 
-            });
+            console.log('wohoo!');
+            $(window).off("mouseup.peroozHandler","**");
         },
 
         removeMouseicon: function(){
@@ -430,6 +430,12 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             _this.$mouseicon = null;
         },
 
+        /*--------------------------------------------------------*/
+        /*Set Reminder Fxn*/
+        setReminder: function(){
+
+        },
+        
         /*--------------------------------------------------------*/
         /*Set message listener to listen to messages*/
 		setupReceiver : function() {
@@ -446,6 +452,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 }else if(request.method == "removeMouseiconEvent"){
                     console.log('removeMouseupevent'); 
                     _this.removeObservers();
+                    _this.removeMouseicon();
                     sendResponse({message: "OK"});
 
                 //annotation creation message
@@ -457,21 +464,24 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                 //insert notes into DOM 
                	}else if(request.method == "setNotes"){
-               		sendResponse({message: "OK"});
                     _this.setNotes(request.perooz_article_id);
+                    sendResponse({message: "OK"});
 
                 //read notes
                 }else if(request.method == "readNotes"){
-                    sendResponse({message: "OK"});
                     _this.activateReadSidebar;
+                    sendResponse({message: "OK"});
                 
                 //set reminder to log in to page
                	}else if(request.method == "setReminder"){
+                    console.log('HAPPENED');
+                    _this.setReminder;
                		sendResponse({message: "OK"});
 
                 //set session token - upon user login or tab refresh
                 }else if(request.method == "setSess"){
                     _this.sess_cookie = request.sess_cookie;
+                    sendResponse({message: "OK"});
 
                 //remove session token [if user logs out]
                 }else if(request.method == "removeSess"){
@@ -479,11 +489,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         _this.sess_cookie = null;
                     }
                     sendResponse({message: "OK"});
-
-                //if message is not legitimate
-               	}else{
-               		sendResponse({message: "Unknown"});
-               	}
+                }
             });
         }
         

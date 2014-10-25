@@ -9,7 +9,7 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 			/*Send message to remove session token*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "background.js"},function(response){
-					console.log('message sent');
+					console.log('remove sessiontoken message sent');
 					// if (response.message != 'OK'){
 					// 	console.log(response.message);
 					// }
@@ -19,7 +19,7 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 			/*Send message to remove Mouseicon event in page*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "background.js"},function(response){
-					console.log('message sent');
+					console.log('remove mouseicon message sent');
 					// if (response.message != 'OK'){
 					// 	console.log(response.message);
 					// }
@@ -36,6 +36,33 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 	}
 });
 
+/*Add listener from chrome events*/
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+	if (request.method == "setupContextMenu"){
+		console.log('listener here');
+
+		/*Set chrome context menu and Event Listener*/
+		chrome.contextMenus.create({"title": "Create Perooz Annotation", "id":"p_menu","contexts":["all"]});
+
+		/*Set the chrome context menu event listener*/
+		chrome.contextMenus.onClicked.addListener(function(){
+
+			/*Send message to content script to retrieve selected string from activetab*/
+			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+				chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
+					console.log('menu click message sent');
+					// if (response.message != 'OK'){
+					// 	console.log(response.message);
+					// }
+				});
+			});
+			
+		});
+
+		sendResponse({message:"OK"});
+	}
+});
+
 /*On a new chrome tab being opened*/
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 	if (changeInfo.status == "complete"){
@@ -48,18 +75,12 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				/*Send message to content script to show a reminder to log in*/
 				chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 					chrome.tabs.sendMessage(tabs[0].id,{method: "setReminder", from: "background.js"},function(response){
-						if (typeof(response) != 'OK'){
+						//if (response.message !== 'OK'){
 							console.log(response.message);
-						}
+						//}
 					});
 				});
 
-				/*If chrome context menu does exist, remove it*/
-				// if (cmid){
-				// 	chrome.contextMenus.removeAll(function(){
-				// 		cmid = null;
-				// 	});
-				// }
 				return;
 			}
 
@@ -135,9 +156,9 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 						//send message to content script with relevant information
 						chrome.tabs.sendMessage(tabId, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {
-        					if (response.message !== 'OK') {
-		            			//console.log(response.message);
-        					}
+        					//if (response.message !== 'OK') {
+		            			console.log(response.message);
+        					//}
 	        			});
 
 					}
