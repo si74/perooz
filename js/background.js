@@ -11,7 +11,7 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 
 				/*Send message to remove session token*/
 				chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-					chrome.tabs.sendMessage(tabs[i].id,{method: "removeSess",from: "background.js"},function(response){
+					chrome.tabs.sendMessage(tabs[0].id,{method: "removeSess",from: "background.js"},function(response){
 						console.log('remove sessiontoken message sent');
 						// if (response.message != 'OK'){
 						// 	console.log(response.message);
@@ -21,7 +21,7 @@ chrome.cookies.onChanged.addListener(function(changeInfo){
 
 				/*Send message to remove Mouseicon event in page*/
 				chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-					chrome.tabs.sendMessage(tabs[i].id,{method: "removeMouseiconEvent",from: "background.js"},function(response){
+					chrome.tabs.sendMessage(tabs[0].id,{method: "removeMouseiconEvent",from: "background.js"},function(response){
 						console.log('remove mouseicon message sent');
 						// if (response.message != 'OK'){
 						// 	console.log(response.message);
