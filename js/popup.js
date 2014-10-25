@@ -159,7 +159,7 @@ $(document).ready(function(){
 										var data=JSON.parse(raw_data);
 										if (xhr1.status == 200 && data.message == 'OK'){
 											var sess_token = data.session_token;
-											chrome.cookies.set({'url': 'https://dev.perooz.io/api','name':'session_token','value':sess_token});
+											chrome.cookies.set({'url': 'https://dev.perooz.io/api','name':'session_token','value':sess_token, 'expirationDate': new Date().getTime() / 1000 + 1209600}); //cookie expiration date set as 2 months
 
 											/*Set main popup menu items*/
 											var menu = "<div class='logout_container'> \
