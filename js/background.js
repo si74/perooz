@@ -201,14 +201,20 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 					if (xhr.status == 200){
 
 						//extract the perooz id of the article
-						var obj = data.values; 
+						var msg = data.message;
 
-						//send message to content script with relevant information
-						chrome.tabs.sendMessage(tabId, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {
-        					//if (response.message !== 'OK') {
-		            			console.log(response.message);
-        					//}
-	        			});
+						if (msg == "OK"){
+							var obj = data.values; 
+
+
+							//send message to content script with relevant information
+							chrome.tabs.sendMessage(tabId, {method: "setNotes", perooz_article_id: obj.perooz_article_id, from: "background.js"}, function(response) {
+	        					//if (response.message !== 'OK') {
+			            			console.log(response.message);
+	        					//}
+		        			});
+
+		        		}
 
 					}
 				}
