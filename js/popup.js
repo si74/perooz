@@ -118,7 +118,7 @@ $(document).ready(function(){
 					if (nonce){
 						/*Display login form if nonce received*/
 						var nonce_string = "<div class='login_container'> \
-												<div id='logo'><img src='images/blueperooz.png' alt='Perooz' style='height:3em;width:auto;'></div> \
+												<div id='logo'><img src='images/Perooz_Icon_130.png' alt='Perooz' style='height:3em;width:auto;'></div> \
 													<form id='login_form'>\
 														<input id='nonce_id' type='hidden' name='" + nonce + "' /> \
 														<input id='username' type='text' name='username' placeholder='username'/><br/> \
