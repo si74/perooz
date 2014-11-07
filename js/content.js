@@ -328,7 +328,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                     var data1 =JSON.parse(raw_data1);
                                     if (xhr1.status == 200){
                                         var notegroup_info = data1.values;
-                                        var img_url = chrome.extension.getURL("images/icon_mini.png");
+                                        var img_url = chrome.extension.getURL("images/Browser_Action_38.png");
                                         //NOTE: TEMP SOL'N. Search for text in each page and place icon with id - note this is temp solution. need better parser
                                         $("p:contains('" + notegroup_info.note_text_overlap + "')").append('<button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:0px;border:0px;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNotegroup"/>');
                                     }
