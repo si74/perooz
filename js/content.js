@@ -283,6 +283,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             
         },
 
+        /*Fxns relating to annotation insertion----------------------------------------------------------------------------------*/
         /*insert Annotations into the Page*/
         setNotes: function(perooz_article_id){
             var $body = $('body');
@@ -329,8 +330,14 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                     if (xhr1.status == 200){
                                         var notegroup_info = data1.values;
                                         var img_url = chrome.extension.getURL("images/Browser_Action_38.png");
-                                        //NOTE: TEMP SOL'N. Search for text in each page and place icon with id - note this is temp solution. need better parser
-                                        $("p:contains('" + notegroup_info.note_text_overlap + "')").append('<button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:0px;border:0px;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNotegroup"/>');
+
+                                        var needle = notegroup_info.note_text_overlap;
+                                        var haystack = document.body;
+
+                                        needle = getLastWords(needle, 3); //first grab last three words in annotation overlap
+                                        replacement = needle + '<button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:0px;border:0px;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNotegroup"/>'; //div tag with relevant info 
+                                        findAndReplace(needle, replacement, haystack);
+
                                     }
                                 }
                             }
@@ -357,6 +364,68 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         removeNotes: function(){
             $(".peroozStyle#perooz_article_id").remove();
             $(".peroozNotegroup").remove(); 
+        },
+
+        //if greater than 4 words, grab last 3 letters
+        //if less, grab n-1 letters
+        //cannot annotate less than 2 words
+        function getLastWords(words, wordCount){
+            result = words.split(" ");
+            result = result.slice(Math.max(result.length - wordCount, 1)).join(" "); 
+            return result;
+        },
+
+        /*Find and replace certain text in a page*/
+        /*Searching for last 3 words of annotation*/
+
+        function findAndReplace(searchText, replacement, searchNode) {
+            // See http://james.padolsey.com/javascript/find-and-replace-text-with-javascript/
+            
+            if (!searchText || typeof replacement === 'undefined') {
+                // Throw error here if you want...
+                console.log('not working');
+                return;
+            }
+
+            /*Set regex value*/
+            var regex = typeof searchText === 'string' ?
+                        new RegExp(searchText,'g') : searchText;
+
+            /*determine child notes*/
+            var childNodes = (searchNode || document.body).childNodes;
+            var cnLength = childNodes.length;
+            var excludes = 'html,head,style,title,link,meta,script,object,iframe';
+
+            //walks the tree and goes to child nodes simultaneously 
+            while (cnLength--) {
+                var currentNode = childNodes[cnLength]; //grab last node first. work bottom to top
+                if (currentNode.nodeType === 1 &&
+                    (excludes + ',').indexOf(currentNode.nodeName.toLowerCase() + ',') === -1) { //if node is element node (not text) and not one of the forbidden types (blacklisted)
+                    //argument.callee is recursive - calling findAndReplace within itself - makes parent node child node
+                    arguments.callee(searchText, replacement, currentNode);
+                }
+
+
+                //if node is not a text node or string node contained in current node - continue (skip over current iteration)
+                if (currentNode.nodeType !== 3 || !regex.test(currentNode.data) ) {  
+                    continue;
+                }
+
+                /*If there is a match - this code runs*/
+                var parent = currentNode.parentNode,
+                    frag = (function(){
+                        var html = currentNode.data.replace(regex, replacement),
+                            wrap = document.createElement('div'),
+                            frag = document.createDocumentFragment();
+                        wrap.innerHTML = html;
+                        while (wrap.firstChild) {
+                            frag.appendChild(wrap.firstChild);
+                        }
+                        return frag;
+                    })();
+                parent.insertBefore(frag, currentNode);
+                parent.removeChild(currentNode);
+            }
         },
 
         /*SET OF FUNCTIONS RELATING TO MOUSEUP--------------------*/
