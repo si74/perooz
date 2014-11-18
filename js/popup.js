@@ -223,9 +223,14 @@ $(document).ready(function(){
 															// }
 														});
 
+													/*Grab tabs url and other info*/
+													var tab_url = tabs[i].url;
+													var purl_url = $.url(tab_url);
+													var url_adjusted = tab_url.replace((purl_url.attr('protocol')+'://'),"");
+
 
 													/*Send message to content script page to setup mouseicon event*/
-														chrome.tabs.sendMessage(tabs[i].id,{method: "setupMouseiconEvent",from: "popup.js"},function(response){
+														chrome.tabs.sendMessage(tabs[i].id,{method: "setupMouseiconEvent",from: "popup.js",article_url:url_adjusted},function(response){
 															console.log('mouseiconsetup message sent');
 															// if (response.message != 'OK'){
 															// 	console.log(response.message);

@@ -23,6 +23,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         sess_cookie: null,
         pz_user_id: null,
         pz_contributor_id: null, 
+        pz_article_id : null,
+        article_url : null,
         mouseiconPosition: {
             top: -9999, 
             left: -9999
@@ -252,14 +254,37 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 return;
             }
 
-            /*Check if article in db*/
-            var perooz_article_id = $peroozSidebar.has(".peroozStyle#perooz_article_id").innerText()
-            if (!perooz_article_id){ //if not in db, add current article to db
-                
+            /*Grab contributor id from the database if it is present*/
+            var xhr = new XMLHttpRequest();
+            var url = "https://dev.perooz.io/api/auth/get_contrib_from_sess.php"; 
+            xhr.open("GET", url, false); //note that this is a synchronous request
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+            xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
+
+                    if (xhr.status == 200 && data.message == "OK"){
+                        _this.pz_contributor_id = data.perooz_contributor_id;
+                    }
+                }
+            }
+            xhr.send();
+            if (!_this.pz_contributor_id){
+                $(".peroozStyle#peroozMessage").html('Insufficient permission to create annotation.');
+                return;
             }
 
-            /*Grab contributor id from db*/
 
+            /*Check if article in db*/
+            var _this.pz_article_id = $peroozSidebar.has(".peroozStyle#perooz_article_id").innerText()
+            if (!_this.pz_article_id){ //if not in db, add current article to db
+                //grab article url
+                
+                //grab source url
+            }
 
             /*Create annotation*/
             // xhr = new XMLHttpRequest();
@@ -329,14 +354,14 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                     var data1 =JSON.parse(raw_data1);
                                     if (xhr1.status == 200){
                                         var notegroup_info = data1.values;
-                                        var img_url = chrome.extension.getURL("images/Browser_Action_38.png");
+                                        var img_url = chrome.extension.getURL("images/icon_mini.png");
 
                                         var needle = notegroup_info.note_text_overlap;
                                         var haystack = document.body;
 
-                                        needle = getLastWords(needle, 3); //first grab last three words in annotation overlap
-                                        replacement = needle + '<button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:0px;border:0px;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNotegroup"/>'; //div tag with relevant info 
-                                        findAndReplace(needle, replacement, haystack);
+                                        needle = _this.getLastWords(needle, 3); //first grab last three words in annotation overlap
+                                        replacement = needle + ' <button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:1px;border:0px;display:inline-block;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNotegroup"></button>'; //div tag with relevant info 
+                                        _this.findAndReplace(needle, replacement, haystack);
 
                                     }
                                 }
@@ -369,7 +394,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         //if greater than 4 words, grab last 3 letters
         //if less, grab n-1 letters
         //cannot annotate less than 2 words
-        function getLastWords(words, wordCount){
+        getLastWords: function(words, wordCount){
             result = words.split(" ");
             result = result.slice(Math.max(result.length - wordCount, 1)).join(" "); 
             return result;
@@ -378,7 +403,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         /*Find and replace certain text in a page*/
         /*Searching for last 3 words of annotation*/
 
-        function findAndReplace(searchText, replacement, searchNode) {
+        findAndReplace: function(searchText, replacement, searchNode) {
             // See http://james.padolsey.com/javascript/find-and-replace-text-with-javascript/
             
             if (!searchText || typeof replacement === 'undefined') {
@@ -521,6 +546,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 //setup mouseicon listener
                 if (request.method == "setupMouseiconEvent"){
                     console.log('setMouseupevent');
+                    _this.article_url = request.article_url;
                     _this.setupMouseicon(); 
                     _this.attachObservers(); 
                     sendResponse({message: "OK"});
@@ -570,6 +596,18 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 }else if(request.method == "removeSess"){
                     if (_this.sess_cookie != null){
                         _this.sess_cookie = null;
+                    }
+                    if (_this.pz_user_id != null){
+                        _this.pz_user_id = null;
+                    }
+                    if (_this.pz_contributor_id != null){
+                        _this.pz_contributor_id = null;
+                    }
+                    if (_this.pz_article_id != null){
+                        _this.pz_article_id = null;
+                    }
+                    if (_this.article_url != null){
+                        _this.article_url = null;
                     }
                     sendResponse({message: "OK"});
                 }

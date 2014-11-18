@@ -157,6 +157,11 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				return;
 			}
 
+			/*Grab tab url information*/
+			var tab_url = tab.url;
+			var purl_url = $.url(tab_url);
+			var url_adjusted = tab_url.replace((purl_url.attr('protocol')+'://'),"");
+
 			/*(2) Send message to content script to set value of session cookie*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				chrome.tabs.sendMessage(tabs[0].id,{method: "setSess",sess_cookie: cookie.value,from: "background.js"},function(response){
@@ -170,7 +175,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 			/*(3) Set event listener for check for text selection - send message to content script to setup listener*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent", from: "background.js"},function(response){
+				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent", from: "background.js", article_url:url_adjusted},function(response){
 					console.log('message sent');
 					// if (response.message != 'OK'){
 					// 	console.log(response.message);
@@ -178,12 +183,9 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				});
 			});
 
-			/*(4) Grab the url from the current tab*/
-			var tab_url = tab.url;
-			var purl_url = $.url(tab_url);
-			var url_adjusted = tab_url.replace((purl_url.attr('protocol')+'://'),"");
+			
 
-			/*Prep the the xmlhttprequest*/
+			/*(4)Prep the the xmlhttprequest*/
 			var xhr = new XMLHttpRequest();
 			var url = "https://dev.perooz.io/api/search/articles?url=" + encodeURIComponent(url_adjusted); 
 			xhr.open("GET", url, true);
