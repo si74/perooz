@@ -21,8 +21,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 		sidebarTransitionDuration : 400,
         $mouseicon : null,
         sess_cookie: null,
-        pz_user_id: null,
-        pz_contributor_id: null, 
         pz_article_id : null,
         article_url : null,
         mouseiconPosition: {
@@ -149,6 +147,27 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
     			_this.deactivateSidebar();
     		});
 
+            var pz_contributor_id = null; 
+
+            /*Grab contributor id from session cookie*/
+            var xhr = new XMLHttpRequest();
+            var url = "https://dev.perooz.io/api/auth/get_contrib_from_sess.php"; 
+            xhr.open("GET", url, false); //note that this is a synchronous request
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+            xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
+
+                    if (xhr.status == 200 && data.message == "OK"){
+                        pz_contributor_id = data.perooz_contributor_id;
+                    }
+                }
+            }
+            xhr.send();
+
     		/*Grab notes for notegroup and place in the page*/
     		var xhr = new XMLHttpRequest();
             var url = "https://dev.perooz.io/api/notegroups/" + notegroup_id + "/note_lists"; 
@@ -190,15 +209,30 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                             			var note_inline = note.inline_text;
                             			var note_text =  note.note_text;
+                                        var note_contributor_id = note.perooz_contributor_id;
                             			
-                            			//grab contributor details
-                      					//this part will be completed later
-
                       					//display note and contributor details
                       					$('#peroozMain').append('<div id="' + notelist_array[i] + '" class="peroozStyle peroozNote"> \
                       												<div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> <br/><br/> \
                       												<div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> <br/><br/> \
                       										    </div>');
+
+                                        //check if annotation is by this contributor
+                                        if (pz_contributor_id == note_contributor_id){
+                                            $('#' + notelist_array[i]).append('<button class="peroozStyle peroozNote" id="' + notelist_array[i] + '"></button><br/>');
+
+                                            $('#' + notelist_array[i]).on('click',function(){
+                                                $('#' + notelist_array[i]).append('<input id="peroozNoteEdit" class="peroozStyle"></input><br/>'
+                                                                              '<button class="peroozStyle" id="peroozNoteEditSave"></button>
+                                                                               <button class="peroozStyle" id="peroozNoteEditCancel"></button>');
+                                            });
+
+
+                                        }
+
+                                        
+
+
 
                       					//add an line image afer note if not the last in the notegroup
                       						
@@ -254,6 +288,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 return;
             }
 
+            var pz_contributor_id = null; 
+
             /*Grab contributor id from the database if it is present*/
             var xhr = new XMLHttpRequest();
             var url = "https://dev.perooz.io/api/auth/get_contrib_from_sess.php"; 
@@ -267,12 +303,12 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                     var data=JSON.parse(raw_data);
 
                     if (xhr.status == 200 && data.message == "OK"){
-                        _this.pz_contributor_id = data.perooz_contributor_id;
+                        pz_contributor_id = data.perooz_contributor_id;
                     }
                 }
             }
             xhr.send();
-            if (!_this.pz_contributor_id){
+            if (!pz_contributor_id){
                 $(".peroozStyle#peroozMessage").html('Insufficient permission to create annotation.');
                 return;
             }
@@ -282,29 +318,56 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             var _this.pz_article_id = $peroozSidebar.has(".peroozStyle#perooz_article_id").innerText()
             if (!_this.pz_article_id){ //if not in db, add current article to db
                 //grab article url
-                
-                //grab source url
+                var xhr = new XMLHttpRequest();
+                var url = "https://dev.perooz.io/api/articles"; 
+                xhr.open("POST", url, false); //note that this is a synchronous request
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+                xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState == 4){
+                        var raw_data = xhr.responseText;
+                        var data=JSON.parse(raw_data);
+
+                        if (xhr.status == 200 && data.message == "OK"){
+                            _this.pz_article_id = data.perooz_article_id;
+                        }
+                    }
+                }
+                xhr.send("article_hyperlink=" + _this.article_url + "&approved=0");
+            }
+
+            /*If article not properly inserted into db*/
+            if (!_this.pz_article_id){
+               $(".peroozStyle#peroozMessage").html('Unable to save. Please try again.');
+                return;
             }
 
             /*Create annotation*/
-            // xhr = new XMLHttpRequest();
-            // var url = "https://dev.perooz.io/api/articles"; 
-            // xhr.open("POST", url, false);
-            // xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-            // xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
-            // xhr.setRequestHeader("Session-Token",cookie.value);
-            // xhr.onreadystatechange = function(){
-            //     if (xhr.readyState == 4){
-            //         if (xhr.status == 200){
-            //             message = 'Annotation successfully created!';
-            //         }else{
-            //             message = 'Error creating annotation. Please try again.';
-            //         }
-            //     }
-            // }
-            // xhr.send("");
+            xhr = new XMLHttpRequest();
+            var url = "https://dev.perooz.io/api/notes"; 
+            xhr.open("POST", url, false);
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+            xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
 
-            // $(".peroozStyle#peroozMain").html('<div id="peroozMessage" class="peroozStyle">' + message + '</div>');
+                    if (xhr.status == 200){
+                        pz_note_id =  data.values; 
+                    }
+                }
+            }
+            xhr.send("perooz_contributor_id=" + pz_contributor_id + "&perooz_article_id=" + _this.perooz_article_id + "&note_type_id=2&inline_text=" + selection + "&note_text=" + note + "&approved=0");
+
+            if (pz_note_id){
+                message = "Note successfully created!";
+            }else{
+                message = 'Error creating annotation. Please try again.';
+            }
+            $(".peroozStyle#peroozMain").html('<div id="peroozMessage" class="peroozStyle">' + message + '</div>');
             
         },
 
@@ -596,12 +659,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 }else if(request.method == "removeSess"){
                     if (_this.sess_cookie != null){
                         _this.sess_cookie = null;
-                    }
-                    if (_this.pz_user_id != null){
-                        _this.pz_user_id = null;
-                    }
-                    if (_this.pz_contributor_id != null){
-                        _this.pz_contributor_id = null;
                     }
                     if (_this.pz_article_id != null){
                         _this.pz_article_id = null;
