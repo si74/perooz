@@ -1,7 +1,7 @@
 /*ID for context menu entry*/
 //var cmid; 
 /*On browser launch - check for session token - if existing, add menu event*/
-$(document).ready(){
+$(document).ready(function(){
 
 	chrome.cookies.get({'url': 'https://dev.perooz.io/api','name':'session_token'}, function(cookie){
 			
@@ -26,9 +26,9 @@ $(document).ready(){
 			});
 			
 		});
-		
-	}
-}
+
+	});
+});
  
 /*Add listener for expired session token*/
 chrome.cookies.onChanged.addListener(function(changeInfo){

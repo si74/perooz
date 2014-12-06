@@ -319,10 +319,11 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             if (article_selector){
                 _this.pz_article_id = $(".peroozStyle#perooz_article_id").innerText();
             }
+
             console.log(_this.pz_article_id);
+
             if (!_this.pz_article_id){ //if not in db, add current article to db
-                console.log('hehe');
-                console.log(_this.article_url);
+
                 //grab article url
                 var xhr = new XMLHttpRequest();
                 var url = "https://dev.perooz.io/api/articles"; 
@@ -337,6 +338,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                         if (xhr.status == 200 && data.message == "OK"){
                             _this.pz_article_id = data.perooz_article_id;
+                            console.log('Good');
                         }
                     }
                 }
@@ -345,7 +347,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*If article not properly inserted into db*/
             if (!_this.pz_article_id){
-               $(".peroozStyle#peroozMessage").html('Unable to save. Please try again.');
+               $(".peroozStyle#peroozMessage").html('Unable to saveD. Please try again.');
                 return;
             }
 
