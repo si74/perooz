@@ -1,5 +1,34 @@
 /*ID for context menu entry*/
 //var cmid; 
+/*On browser launch - check for session token - if existing, add menu event*/
+$(document).ready(){
+
+	chrome.cookies.get({'url': 'https://dev.perooz.io/api','name':'session_token'}, function(cookie){
+			
+		if (!cookie){
+			return
+		}
+
+		/*Set chrome context menu and Event Listener*/
+		chrome.contextMenus.create({"title": "Create Perooz Annotation", "id":"p_menu","contexts":["all"]});
+
+		/*Set the chrome context menu event listener*/
+		chrome.contextMenus.onClicked.addListener(function(){
+
+			/*Send message to content script to retrieve selected string from activetab*/
+			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+				chrome.tabs.sendMessage(tabs[0].id,{method: "getSelection", from: "background.js"},function(response){
+					console.log('menu click message sent');
+					// if (response.message != 'OK'){
+					// 	console.log(response.message);
+					// }
+				});
+			});
+			
+		});
+		
+	}
+}
  
 /*Add listener for expired session token*/
 chrome.cookies.onChanged.addListener(function(changeInfo){
@@ -164,7 +193,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 			/*(2) Send message to content script to set value of session cookie*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				chrome.tabs.sendMessage(tabs[0].id,{method: "setSess",sess_cookie: cookie.value,from: "background.js"},function(response){
+				chrome.tabs.sendMessage(tabs[0].id,{method: "setSess", sess_cookie: cookie.value, from: "background.js"},function(response){
 					console.log('message sent');
 					// if (response.message != 'OK'){
 					// 	console.log(response.message);
@@ -172,10 +201,9 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				});
 			});
 
-
 			/*(3) Set event listener for check for text selection - send message to content script to setup listener*/
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent", from: "background.js", article_url:url_adjusted},function(response){
+				chrome.tabs.sendMessage(tabs[0].id,{method: "setupMouseiconEvent", article_url:url_adjusted, from: "background.js"},function(response){
 					console.log('message sent');
 					// if (response.message != 'OK'){
 					// 	console.log(response.message);
@@ -216,6 +244,8 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 	        					//}
 		        			});
 
+		        		}else{
+		        			console.log('bad');
 		        		}
 
 					}

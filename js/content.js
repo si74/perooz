@@ -222,8 +222,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                             $('#' + notelist_array[i]).append('<button class="peroozStyle peroozNote" id="' + notelist_array[i] + '"></button><br/>');
 
                                             $('#' + notelist_array[i]).on('click',function(){
-                                                $('#' + notelist_array[i]).append('<input id="peroozNoteEdit" class="peroozStyle"></input><br/>'
-                                                                              '<button class="peroozStyle" id="peroozNoteEditSave"></button>
+                                                $('#' + notelist_array[i]).append('<input id="peroozNoteEdit" class="peroozStyle"></input><br/> \
+                                                                               <button class="peroozStyle" id="peroozNoteEditSave"></button> \
                                                                                <button class="peroozStyle" id="peroozNoteEditCancel"></button>');
                                             });
 
@@ -315,8 +315,14 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
 
             /*Check if article in db*/
-            var _this.pz_article_id = $peroozSidebar.has(".peroozStyle#perooz_article_id").innerText()
+            var article_selector = $peroozSidebar.has(".peroozStyle#perooz_article_id").length; //.innerText();
+            if (article_selector){
+                _this.pz_article_id = $(".peroozStyle#perooz_article_id").innerText();
+            }
+            console.log(_this.pz_article_id);
             if (!_this.pz_article_id){ //if not in db, add current article to db
+                console.log('hehe');
+                console.log(_this.article_url);
                 //grab article url
                 var xhr = new XMLHttpRequest();
                 var url = "https://dev.perooz.io/api/articles"; 
