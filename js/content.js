@@ -347,9 +347,11 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*If article not properly inserted into db*/
             if (!_this.pz_article_id){
-               $(".peroozStyle#peroozMessage").html('Unable to saveD. Please try again.');
+               $(".peroozStyle#peroozMessage").html('Unable to save. Please try again.');
                 return;
             }
+
+            var pz_note_id = null;
 
             /*Create annotation*/
             xhr = new XMLHttpRequest();
@@ -368,7 +370,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                     }
                 }
             }
-            xhr.send("perooz_contributor_id=" + pz_contributor_id + "&perooz_article_id=" + _this.perooz_article_id + "&note_type_id=2&inline_text=" + selection + "&note_text=" + note + "&approved=0");
+            xhr.send("perooz_contributor_id=" + pz_contributor_id + "&perooz_article_id=" + _this.pz_article_id + "&note_type_id=2&inline_text=" + selection + "&note_text=" + note + "&approved=0&sort_order=1");
 
             if (pz_note_id){
                 message = "Note successfully created!";
@@ -384,11 +386,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         setNotes: function(perooz_article_id){
             var $body = $('body');
             var $peroozSidebar = $(".peroozStyle#peroozSidebar");
-
-            console.log(perooz_article_id); 
             
             /*Insert hidden div tag into perooz sidebar*/
-            $peroozSidebar.append('<div id="perooz_article_id" class="peroozStyle" style="visibility:hidden;">' + perooz_article_id + '</div>');
+            //$peroozSidebar.append('<div id="perooz_article_id" class="peroozStyle">' + perooz_article_id + '</div>');
 
             /*(1) Grab notegroup array from background page and display*/
             var xhr = new XMLHttpRequest();
@@ -638,6 +638,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                 //insert notes into DOM 
                	}else if(request.method == "setNotes"){
+                    _this.pz_article_id = request.perooz_article_id;
                     _this.setNotes(request.perooz_article_id);
                     console.log('setNotes');
                     sendResponse({message: "OK"});
