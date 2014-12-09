@@ -1,4 +1,3 @@
-
 /**
  * Perooz class and function
  * @return {[type]} [description]
@@ -23,6 +22,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         sess_cookie: null,
         pz_article_id : null,
         article_url : null,
+        api_url: "https://dev.perooz.io/",
         mouseiconPosition: {
             top: -9999, 
             left: -9999
@@ -151,7 +151,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*Grab contributor id from session cookie*/
             var xhr = new XMLHttpRequest();
-            var url = "https://dev.perooz.io/api/auth/get_contrib_from_sess.php"; 
+            var url = _this.api_url + "api/auth/get_contrib_from_sess.php"; 
             xhr.open("GET", url, false); //note that this is a synchronous request
             xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -170,7 +170,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
     		/*Grab notes for notegroup and place in the page*/
     		var xhr = new XMLHttpRequest();
-            var url = "https://dev.perooz.io/api/notegroups/" + notegroup_id + "/note_lists"; 
+            var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists"; 
             xhr.open("GET", url, false); //note that this is a synchronous request
             xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -192,7 +192,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                             
                             /*Set request for note details*/
                             var xhr1 = new XMLHttpRequest(); 
-                            var url1 = "https://dev.perooz.io/api/notes/" + notelist_array[i];
+                            var url1 = _this.api_url + "api/notes/" + notelist_array[i];
                             xhr1.open("GET",url1,false); //synchronous request
                             xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
                             xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -292,7 +292,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*Grab contributor id from the database if it is present*/
             var xhr = new XMLHttpRequest();
-            var url = "https://dev.perooz.io/api/auth/get_contrib_from_sess.php"; 
+            var url = _this.api_url + "api/auth/get_contrib_from_sess.php"; 
             xhr.open("GET", url, false); //note that this is a synchronous request
             xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -326,7 +326,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                 //grab article url
                 var xhr = new XMLHttpRequest();
-                var url = "https://dev.perooz.io/api/articles"; 
+                var url = _this.api_url + "api/articles"; 
                 xhr.open("POST", url, false); //note that this is a synchronous request
                 xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
                 xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -342,7 +342,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         }
                     }
                 }
-                xhr.send("article_hyperlink=" + _this.article_url + "&approved=0");
+                xhr.send("article_hyperlink=" + _this.article_url + "&approved=0s");
             }
 
             /*If article not properly inserted into db*/
@@ -355,7 +355,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*Create annotation*/
             xhr = new XMLHttpRequest();
-            var url = "https://dev.perooz.io/api/notes"; 
+            var url = _this.api_url + "api/notes"; 
             xhr.open("POST", url, false);
             xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -370,7 +370,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                     }
                 }
             }
-            xhr.send("perooz_contributor_id=" + pz_contributor_id + "&perooz_article_id=" + _this.pz_article_id + "&note_type_id=2&inline_text=" + selection + "&note_text=" + note + "&approved=0&sort_order=1");
+            xhr.send("perooz_contributor_id=" + pz_contributor_id + "&perooz_article_id=" + _this.pz_article_id + "&note_type_id=2&inline_text=" + selection + "&note_text=" + note + "&approved=0&sort_order=1"); //initially no sort of chron job approval
 
             if (pz_note_id){
                 message = "Note successfully created!";
@@ -392,7 +392,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*(1) Grab notegroup array from background page and display*/
             var xhr = new XMLHttpRequest();
-            var url = "https://dev.perooz.io/api/articles/" + perooz_article_id + "/notegroup_lists"; 
+            var url = _this.api_url + "api/articles/" + perooz_article_id + "/notegroup_lists"; 
             xhr.open("GET", url, false); //note that this is a synchronous request
             xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -414,7 +414,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                             /*Create get request to pull notegroup information*/
                             var xhr1 = new XMLHttpRequest(); 
-                            var url1 = "https://dev.perooz.io/api/notegroups/" + notegroup_array[i];
+                            var url1 = _this.api_url + "api/notegroups/" + notegroup_array[i];
                             xhr1.open("GET",url1,false); //synchronous request
                             xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
                             xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");

@@ -1,9 +1,12 @@
+/*The initial api url*/
+var api_url = "https://dev.perooz.io/";
+
 /*ID for context menu entry*/
 //var cmid; 
 /*On browser launch - check for session token - if existing, add menu event*/
 $(document).ready(function(){
 
-	chrome.cookies.get({'url': 'https://dev.perooz.io/api','name':'session_token'}, function(cookie){
+	chrome.cookies.get({'url': api_url + 'api','name':'session_token'}, function(cookie){
 			
 		if (!cookie){
 			return
@@ -106,7 +109,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 	}else if(request.method == "checkTabURL"){
 
 		/*check for presence of session cookie*/
-		chrome.cookies.get({'url': 'https://dev.perooz.io/api','name':'session_token'}, function(cookie){
+		chrome.cookies.get({'url': api_url + 'api','name':'session_token'}, function(cookie){
 			
 			if (!cookie){
 				return
@@ -123,7 +126,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
 					/*Prep the the xmlhttprequest*/
 					var xhr = new XMLHttpRequest();
-					var url = "https://dev.perooz.io/api/search/articles?url=" + encodeURIComponent(url_adjusted); 
+					var url = api_url + "api/search/articles?url=" + encodeURIComponent(url_adjusted); 
 					xhr.open("GET", url, false); //note the for loop won't work unless synchronous
 					xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 					xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -170,7 +173,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 	if (changeInfo.status == "complete"){
 
 		/*(1) check for extension log-in status*/
-		chrome.cookies.get({'url': 'https://dev.perooz.io/api','name':'session_token'}, function(cookie){
+		chrome.cookies.get({'url': api_url + 'api','name':'session_token'}, function(cookie){
 			
 			if (!cookie){
 				
@@ -215,7 +218,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 
 			/*(4)Prep the the xmlhttprequest*/
 			var xhr = new XMLHttpRequest();
-			var url = "https://dev.perooz.io/api/search/articles?url=" + encodeURIComponent(url_adjusted); 
+			var url = api_url + "api/search/articles?url=" + encodeURIComponent(url_adjusted); 
 			xhr.open("GET", url, true);
 			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			xhr.setRequestHeader("Client-Id","13adfewasdf432dae");

@@ -2,6 +2,9 @@
 Author: Sneha Inguva
 Date: 7-29-2014*/
 
+/*The initial api url*/
+var api_url = "https://dev.perooz.io/";
+
 /**
  * Function validates username or password input for sign in form
  * @param  {string} input 
@@ -27,14 +30,14 @@ var input_validation = function(input,$sel){
  * Function redirects User to sign up tab
  */
 var sign_up = function(){
-	chrome.tabs.create({url: 'https://dev.perooz.io/joinus.php'});
+	chrome.tabs.create({url: api_url + 'joinus.php'});
 }
 
 /**
  * Function redirects users to forgot password 
  */
 var forgot_pw = function(){
-	chrome.tabs.create({url: 'https://dev.perooz.io/forgotpw.php'});
+	chrome.tabs.create({url: api_url + 'forgotpw.php'});
 }
 
 $(document).ready(function(){
@@ -45,7 +48,7 @@ $(document).ready(function(){
 		return; 
 	}
 
-	chrome.cookies.get({'url': 'https://dev.perooz.io/api','name':'session_token'}, function(cookie){
+	chrome.cookies.get({'url': api_url + 'api','name':'session_token'}, function(cookie){
 	
 		if (cookie){
 			/*Set main popup menu*/
@@ -68,7 +71,7 @@ $(document).ready(function(){
 
 				/*Chrome get cookie*/
 				/*Remove session token from database*/
-				chrome.cookies.get({'url':'https://dev.perooz.io/api','name':"session_token"},function(cookie){
+				chrome.cookies.get({'url': api_url + 'api','name':"session_token"},function(cookie){
 													
 					if (!cookie){
 						return;
@@ -76,7 +79,7 @@ $(document).ready(function(){
 
 					/*Remove session token from db*/
 					var xhr2 = new XMLHttpRequest();
-					var url2 = "https://dev.perooz.io/api/auth/remove_sess.php";
+					var url2 = api_url + "api/auth/remove_sess.php";
 					xhr2.open("GET",url2,false); //synchronous 
 					xhr2.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 					xhr2.setRequestHeader("Client-Id",client_id);
@@ -92,7 +95,7 @@ $(document).ready(function(){
 				});
 
 				/*Remove chrome session cookie*/
-				chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
+				chrome.cookies.remove({'url': api_url + 'api', 'name': 'session_token'}, function(deleted_cookie){ 
 					$('.main').html("Logged out! Please refresh page to log back in.");
 				});
 
@@ -102,7 +105,7 @@ $(document).ready(function(){
 
 			/*Send web api request to receive nonce value*/
 			xhr = new XMLHttpRequest();
-			var url = "https://dev.perooz.io/api/auth/nonce.php"; 
+			var url = api_url + "api/auth/nonce.php"; 
 			xhr.open("GET", url, true);
 			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			xhr.setRequestHeader("Client-Id",client_id);
@@ -147,7 +150,7 @@ $(document).ready(function(){
 								var params = "uname=" + username + "&pwd=" + pwd;  
 								
 								xhr1 = new XMLHttpRequest(); 
-								var url1 = "https://dev.perooz.io/api/auth/login.php"
+								var url1 = api_url + "api/auth/login.php"
 								xhr1.open("POST",url1,true);
 								xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 								xhr1.setRequestHeader("Client-Id",client_id);
@@ -159,7 +162,7 @@ $(document).ready(function(){
 										var data=JSON.parse(raw_data);
 										if (xhr1.status == 200 && data.message == 'OK'){
 											var sess_token = data.session_token;
-											chrome.cookies.set({'url': 'https://dev.perooz.io/api','name':'session_token','value':sess_token, 'expirationDate': new Date().getTime() / 1000 + 1209600}); //cookie expiration date set as 2 months
+											chrome.cookies.set({'url': api_url,'name':'session_token','value':sess_token, 'expirationDate': new Date().getTime() / 1000 + 1209600}); //cookie expiration date set as 2 months
 
 											/*Set main popup menu items*/
 											var menu = "<div class='logout_container'> \
@@ -180,7 +183,7 @@ $(document).ready(function(){
 											$("#logout").on('click',function(){
 
 												/*Get chrome cookie and remove sesson token from db*/
-												chrome.cookies.get({'url':'https://dev.perooz.io/api','name':"session_token"},function(cookie){
+												chrome.cookies.get({'url': api_url,'name':"session_token"},function(cookie){
 													
 													if (!cookie){
 														return;
@@ -188,7 +191,7 @@ $(document).ready(function(){
 
 													/*Remove session token from db*/
 													var xhr2 = new XMLHttpRequest();
-													var url2 = "https://dev.perooz.io/api/auth/remove_sess.php";
+													var url2 = api_url + "api/auth/remove_sess.php";
 													xhr2.open("GET",url2,false); //synchronous 
 													xhr2.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 													xhr2.setRequestHeader("Client-Id",client_id);
@@ -204,7 +207,7 @@ $(document).ready(function(){
 												});
 
 												/*Remove chrome cookie from browser*/
-												chrome.cookies.remove({'url': 'https://dev.perooz.io/api', 'name': 'session_token'}, function(deleted_cookie){ 
+												chrome.cookies.remove({'url': api_url + 'api', 'name': 'session_token'}, function(deleted_cookie){ 
 													$('.main').html("Logged out! Please refresh page to log back in.");
 												});
 
