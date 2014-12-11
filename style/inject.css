@@ -38,6 +38,9 @@
 	padding-right:1.5em;
 	padding-top:150px;
 	width:330px;
+	height:80%;
+	padding-bottom:1em;
+	overflow:scroll;
 }
 
 .peroozStyle#peroozTxt{

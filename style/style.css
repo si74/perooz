@@ -6,15 +6,30 @@ html, body, div,button,input{
 	font-family: 'Lato', sans-serif;
 }
 
+body{
+	background-image: url("../images/shutterstock_61010557_small.png");
+	max-width:100%;
+	max-height:100%;
+	margin:0px;
+	-webkit-border-radius: 50px;
+  	-moz-border-radius: 50px;
+  	border-radius: 50px;
+}
+
+#logo{
+	width:100%;
+	text-align:center;
+}
+
 /*Sign in form style*/
 /*Login Container style*/
 .login_container{
-	border-style:solid;
+	/*border-style:solid;
 	border-width: 0.5em;
 	border-radius:5px;
-	border-color:#FF6600;
+	border-color:#999;*/
 	font-size:1em;
-	padding:5px;
+	padding:10px;
 }
 
 /*Input fields*/
@@ -40,9 +55,11 @@ html, body, div,button,input{
 	height:2em;
 	margin:0.25em;
 	font-size:1em;
-	background-color:#17c6fd;
+	background-color:#19486a;
 	border:none;
 	color:#FFF;
+	cursor: pointer;
+	cursor: hand;
 }
 
 #sign_up{
@@ -50,9 +67,11 @@ html, body, div,button,input{
 	height:2em;
 	margin:0.25em;
 	font-size:1em;
-	background-color:#17c6fd;
+	background-color:#19486a;
 	border:none;
 	color:#FFF;
+	cursor: pointer;
+	cursor: hand;
 }
 
 #forgot_pw{
@@ -62,6 +81,57 @@ html, body, div,button,input{
 	font-size:0.8em;
 	background-color:#FFF;
 	border-style:solid;
-	border-color:#FF6600;
-	color:#FF6600;
+	border-color:#19486a;
+	color:#19486a;
+	cursor: pointer;
+	cursor: hand;
+}
+
+/*LOGOUT CONTAINER STYLE*/
+.logout_container{
+	font-size:1em;
+	padding:10px;
+	width:19em;
+}
+
+#instructions1,#instructions2{
+	background-color:#fff;
+	opacity:0.8;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#int1text,#int2text{
+	background-color:none;
+	color:#19486a;
+	opacity:1;
+	padding:5px;
+}
+
+#logout{
+	width:100px;
+	height:1.8em;
+	margin:0.25em;
+	font-size:0.8em;
+	border-style:solid;
+	border-color:#19486a;
+	color:#fff;
+	background-color:#19486a;
+	cursor: pointer;
+	cursor: hand;
+}
+
+#logout_message{
+	background-color:#fff;
+	color:#19486a;
+	opacity:0.8;
+	margin:10px;
+	height:5em;
+	width:8em;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding:5px;
+	text-align:center;
 }

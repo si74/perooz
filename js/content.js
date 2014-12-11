@@ -91,7 +91,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             //submit annotation to temp db
     		$(".peroozStyle#peroozSubmit").on('click',function(){
     			if ($(".peroozStyle#peroozNote").val().length > 0){
-    				var annotation = $(".peroozStyle#peroozNote").val().length;
+    				var annotation = $(".peroozStyle#peroozNote").val();
                     var result = _this.createNote(selection,annotation);
                     //$(".peroozStyle#peroozMessage").html('Annotation successfully created!')
     			}else{
@@ -107,6 +107,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             
             var $body = $('body');
         	var $peroozSidebar = $('.peroozStyle#peroozSidebar');
+
+            var start = 0; 
+            var max = 10; 
 
             /*Animate body to withdraw*/
         	$body.animate({
@@ -218,17 +221,17 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                       										    </div>');
 
                                         //check if annotation is by this contributor
-                                        if (pz_contributor_id == note_contributor_id){
-                                            $('#' + notelist_array[i]).append('<button class="peroozStyle peroozNote" id="' + notelist_array[i] + '"></button><br/>');
+                                        // if (pz_contributor_id == note_contributor_id){
+                                        //     $('#' + notelist_array[i]).append('<button class="peroozStyle peroozNote" id="' + notelist_array[i] + '"></button><br/>');
 
-                                            $('#' + notelist_array[i]).on('click',function(){
-                                                $('#' + notelist_array[i]).append('<input id="peroozNoteEdit" class="peroozStyle"></input><br/> \
-                                                                               <button class="peroozStyle" id="peroozNoteEditSave"></button> \
-                                                                               <button class="peroozStyle" id="peroozNoteEditCancel"></button>');
-                                            });
+                                        //     $('#' + notelist_array[i]).on('click',function(){
+                                        //         $('#' + notelist_array[i]).append('<input id="peroozNoteEdit" class="peroozStyle"></input><br/> \
+                                        //                                        <button class="peroozStyle" id="peroozNoteEditSave"></button> \
+                                        //                                        <button class="peroozStyle" id="peroozNoteEditCancel"></button>');
+                                        //     });
 
 
-                                        }
+                                        // }
 
                                         
 
@@ -242,6 +245,12 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                             xhr1.send();
 
                         }
+
+                        $("peroozMain").bind('scroll',function(){
+                            if( $(this).scrollTop() == $(this)[0].scrollHeight - $(this).innerHeight() ){
+                                alert('At bottom!');
+                            }
+                        });
 
             		}
             	}
@@ -425,7 +434,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                     var data1 =JSON.parse(raw_data1);
                                     if (xhr1.status == 200){
                                         var notegroup_info = data1.values;
-                                        var img_url = chrome.extension.getURL("images/icon_mini.png");
+                                        var img_url = chrome.extension.getURL("images/icon_tiny_38.png");
 
                                         var needle = notegroup_info.note_text_overlap;
                                         var haystack = document.body;

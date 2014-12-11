@@ -53,15 +53,23 @@ $(document).ready(function(){
 		if (cookie){
 			/*Set main popup menu*/
 			var menu = "<div class='logout_container'> \
+							<img src='images/Perooz_Logo_400dark.png' alt='Perooz' style='height:5em;width:auto;'> <br/><br/> \
 							<div id='instructions'> \
-								(1) Keep browsing! If you see a <img src='' alt='annotation' style=''> icon, there are annotations. \
-									Simply click the icon to see more. \
-								(2) If you are a Perooz annotator, simply select the text you wish to annotate. \
-									A <img src='' alt='annotation' style=''> icon will appear, which you can click to create the annotation. \
-									Alternatively, you can right click, go to the chrome Perooz menu <img src='' alt='annotation' style=''>, \
-									and select ''create an annotation.'' \
-							</div> \
-							<button id='logout'>LOGOUT</div> \
+								<div id='instructions1'> \
+									<div id='int1text'> \
+										<b>READ ANNOTATIONS:</b> <br/> If you see a <img src='images/icon_tiny_38.png' alt='annotation'> icon, there are annotations. \
+										Simply click the icon to see more. \
+									</div> \
+								</div> <br/>\
+								<div id='instructions2'> \
+									<div id='int2text'> \
+										<b>CREATE ANNOTATIONS:</b> <br/> Select the text you wish to annotate. \
+										A [+] icon will appear, which you can click to create the annotation. \
+										<br/> Alternatively, you can right click and select <img src='images/icon_tiny_38.png' alt='annotation'> Create Perooz annotation. \
+									</div> \
+								</div> \
+							</div> <br/>\
+							<button id='logout'>LOGOUT</button> \
 						</div>";
 
 			$(".main").html(menu);
@@ -96,7 +104,9 @@ $(document).ready(function(){
 
 				/*Remove chrome session cookie*/
 				chrome.cookies.remove({'url': api_url + 'api', 'name': 'session_token'}, function(deleted_cookie){ 
-					$('.main').html("Logged out! Please refresh page to log back in.");
+					$('.main').html("<div id='logout_message'> \
+										Logged out! Please refresh page to log back in. \
+									</div>");
 				});
 
 			});
@@ -121,7 +131,7 @@ $(document).ready(function(){
 					if (nonce){
 						/*Display login form if nonce received*/
 						var nonce_string = "<div class='login_container'> \
-												<div id='logo'><img src='images/Perooz_Icon_130.png' alt='Perooz' style='height:3em;width:auto;'></div> \
+												<div id='logo'><img src='images/Perooz_Logo_400dark.png' alt='Perooz' style='height:10em;width:auto;'></div> \
 													<form id='login_form'>\
 														<input id='nonce_id' type='hidden' name='" + nonce + "' /> \
 														<input id='username' type='text' name='username' placeholder='username'/><br/> \
@@ -166,16 +176,24 @@ $(document).ready(function(){
 
 											/*Set main popup menu items*/
 											var menu = "<div class='logout_container'> \
-															<div id='instructions'> \
-																(1) Keep browsing! If you see a <img src='' alt='annotation' style=''> icon, there are annotations. \
-																	Simply click the icon to see more. \
-																(2) If you are a Perooz annotator, simply select the text you wish to annotate. \
-																	A <img src='' alt='annotation' style=''> icon will appear, which you can click to create the annotation. \
-																	Alternatively, you can right click, go to the chrome Perooz menu <img src='' alt='annotation' style=''>, \
-																	and select ''create an annotation.'' \
-															</div> \
-															<button id='logout'>LOGOUT</button> \
-														</div>";
+																		<img src='images/Perooz_Logo_400dark.png' alt='Perooz' style='height:5em;width:auto;'> <br/><br/> \
+																		<div id='instructions'> \
+																			<div id='instructions1'> \
+																				<div id='int1text'> \
+																					<b>READ ANNOTATIONS:</b> <br/> If you see a <img src='images/icon_tiny_38.png' alt='annotation'> icon, there are annotations. \
+																					Simply click the icon to see more. \
+																				</div> \
+																			</div> <br/>\
+																			<div id='instructions2'> \
+																				<div id='int2text'> \
+																					<b>CREATE ANNOTATIONS:</b> <br/> Select the text you wish to annotate. \
+																					A [+] icon will appear, which you can click to create the annotation. \
+																					<br/> Alternatively, you can right click and select <img src='images/icon_tiny_38.png' alt='annotation'> Create Perooz annotation. \
+																				</div> \
+																			</div> \
+																		</div> <br/>\
+																		<button id='logout'>LOGOUT</button> \
+																	</div>";
 
 											$(".main").html(menu);
 
@@ -208,7 +226,9 @@ $(document).ready(function(){
 
 												/*Remove chrome cookie from browser*/
 												chrome.cookies.remove({'url': api_url + 'api', 'name': 'session_token'}, function(deleted_cookie){ 
-													$('.main').html("Logged out! Please refresh page to log back in.");
+													$('.main').html("<div id='logout_message'> \
+																		Logged out! Please refresh page to log back in. \
+																	</div>");
 												});
 
 											});
