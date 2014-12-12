@@ -33,6 +33,7 @@
   "web_accessible_resources":[
     "images/*.png",
     "images/*.jpg",
+    "images/*.gif",
     "js/templates/*"
   ]
 }

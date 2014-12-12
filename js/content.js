@@ -121,7 +121,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             	'margin-right': 0
         	}, this.sidebarTransitionDuration,function(){
                 $peroozSidebar.attr('padding-left', '1.5em');
-                $peroozSidebar.attr('padding-right', '1.5em');
+                $peroozSidebar.attr('padding-right', '1.5em'); 
             });
 
         	/*If session token is not present*/
@@ -138,7 +138,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*Set general properties of the page*/
             //set perooz sidebar menu
-    		$peroozSidebar.html('<div id="peroozBody" class="peroozStyle"> \
+            $peroozSidebar.html('<div id="peroozBody" class="peroozStyle"> \
                                      <button id="peroozClose" class ="peroozStyle">close</button> \
                                      <div id="peroozMain" class="peroozStyle"> \
                                         <div id="peroozMessage" class="peroozStyle"></div> \
@@ -172,6 +172,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             xhr.send();
 
     		/*Grab notes for notegroup and place in the page*/
+            var start_id = 1; 
+
     		var xhr = new XMLHttpRequest();
             var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists"; 
             xhr.open("GET", url, false); //note that this is a synchronous request
@@ -189,7 +191,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         var notelist_arrayLength = notelist_array.length; //grab list of notes for notegroup
 
                         for (var i=0; i< notelist_arrayLength; i++){ //iterate through notelist
-                            console.log(notelist_array[i]);
 
                             var note_id = notelist_array[i]; //grab note details for each note
                             
@@ -246,7 +247,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
                         }
 
-                        $("peroozMain").bind('scroll',function(){
+                        $("#peroozMain").bind('scroll',function(){
                             if( $(this).scrollTop() == $(this)[0].scrollHeight - $(this).innerHeight() ){
                                 alert('At bottom!');
                             }

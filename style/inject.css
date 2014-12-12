@@ -55,6 +55,11 @@
 	font-style:italic;
 }*/
 
+/*BUG - asynchronous and loading issue*/
+/*.peroozStyle#loader{
+	background-image: url("../images/preloader.GIF");
+}*/
+
 .peroozStyle#peroozNotegroup{
 	cursor:pointer;
 }
