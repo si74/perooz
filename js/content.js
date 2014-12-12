@@ -214,11 +214,13 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                             			var note_inline = note.inline_text;
                             			var note_text =  note.note_text;
                                         var note_contributor_id = note.perooz_contributor_id;
-                            			
-                      					//display note and contributor details
+                                        var author_name = note.first_name + ' ' + note.last_name;
+                            		  
+                                        //display note and contributor details
                       					$('#peroozMain').append('<div id="' + notelist_array[i] + ' peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
                       												<div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> \
                       												<div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> \
+                                                                    <div id="peroozNoteAuthor" class="peroozStyle"> -' + author_name + '</div> \
                       										    </div>');
 
                                         //check if annotation is by this contributor
@@ -303,6 +305,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                                 var note_inline = note.inline_text;
                                                 var note_text =  note.note_text;
                                                 var note_contributor_id = note.perooz_contributor_id;
+                                                var author_name = note.first_name + ' ' + note.last_name;
 
                                                 /*Preloader not quite working*/
                                                 /*$('.peroozStyle#loader').remove();*/
@@ -311,6 +314,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                                 $('#peroozMain').append('<div id="' + notelist_array[i] + ' peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
                                                                             <div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> \
                                                                             <div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> \
+                                                                            <div id="peroozNoteAuthor" class="peroozStyle"> -' + author_name + '</div> \
                                                                         </div>');
 
                                                     

@@ -93,6 +93,17 @@
 	font-size:0.8em;
 }
 
+.peroozStyle#peroozNoteAuthor{
+	width:300px;
+	padding:1em;
+	font-style:normal;
+	font-weight:normal;
+	color:#999;
+	background-color:#fff;
+	font-size: 0.6em;
+	text-align:right;
+}
+
 /*Perooz annotation details*/
 .peroozStyle#perooz-mouseicon {
 	position: absolute !important;
