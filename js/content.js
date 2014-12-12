@@ -258,8 +258,13 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             $("#peroozMain").bind('scroll',function(){
                 if( $(this).scrollTop() == $(this)[0].scrollHeight - $(this).innerHeight() ){
+                    
+                   /*Preloader not working correctly*/
+                   /* var loader_url = chrome.extension.getURL("images/30.gif")
+                    $("peroozMain").append('<div id="loader" class="peroozStyle"><img src=' + loader_url + ' /></div>'); */
+
                     var xhr = new XMLHttpRequest();
-                    var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists" + "?start=" + start_id + "&max=1"; 
+                    var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists" + "?start=" + start_id + "&max=3"; 
                     xhr.open("GET", url, false); //note that this is a synchronous request
                     xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
                     xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -298,6 +303,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                                 var note_inline = note.inline_text;
                                                 var note_text =  note.note_text;
                                                 var note_contributor_id = note.perooz_contributor_id;
+
+                                                /*Preloader not quite working*/
+                                                /*$('.peroozStyle#loader').remove();*/
                                                 
                                                 //display note and contributor details
                                                 $('#peroozMain').append('<div id="' + notelist_array[i] + ' peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
@@ -305,24 +313,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                                                             <div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> \
                                                                         </div>');
 
-                                                //check if annotation is by this contributor
-                                                // if (pz_contributor_id == note_contributor_id){
-                                                //     $('#' + notelist_array[i]).append('<button class="peroozStyle peroozNote" id="' + notelist_array[i] + '"></button><br/>');
-
-                                                //     $('#' + notelist_array[i]).on('click',function(){
-                                                //         $('#' + notelist_array[i]).append('<input id="peroozNoteEdit" class="peroozStyle"></input><br/> \
-                                                //                                        <button class="peroozStyle" id="peroozNoteEditSave"></button> \
-                                                //                                        <button class="peroozStyle" id="peroozNoteEditCancel"></button>');
-                                                //     });
-
-
-                                                // }
-
-                                                
-
-
-
-                                                //add an line image afer note if not the last in the notegroup
                                                     
                                             }
                                         }
@@ -334,7 +324,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                             }
                         }
 
-                        start_id += 1; 
+                        start_id += 3; 
                     }
                     xhr.send();
                 }
