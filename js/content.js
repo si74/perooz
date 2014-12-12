@@ -172,10 +172,10 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             xhr.send();
 
     		/*Grab notes for notegroup and place in the page*/
-            var start_id = 1; 
+            var start_id = 0; 
 
     		var xhr = new XMLHttpRequest();
-            var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists"; 
+            var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists" + "?start=" + start_id + "&max=7"; 
             xhr.open("GET", url, false); //note that this is a synchronous request
             xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
@@ -245,18 +245,101 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                             }
                             xhr1.send();
 
-                        }
-
-                        $("#peroozMain").bind('scroll',function(){
-                            if( $(this).scrollTop() == $(this)[0].scrollHeight - $(this).innerHeight() ){
-                                alert('At bottom!');
-                            }
-                        });
+                        } 
 
             		}
             	}
+
+                start_id += 7; 
             }
             xhr.send();
+
+
+
+            $("#peroozMain").bind('scroll',function(){
+                if( $(this).scrollTop() == $(this)[0].scrollHeight - $(this).innerHeight() ){
+                    var xhr = new XMLHttpRequest();
+                    var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists" + "?start=" + start_id + "&max=1"; 
+                    xhr.open("GET", url, false); //note that this is a synchronous request
+                    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                    xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+                    xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+                    xhr.onreadystatechange = function(){
+                        if (xhr.readyState == 4){
+                            var raw_data = xhr.responseText;
+                            var data=JSON.parse(raw_data);
+
+                            if (xhr.status == 200){
+                                
+                                var notelist_array = data.values;
+                                var notelist_arrayLength = notelist_array.length; //grab list of notes for notegroup
+
+                                for (var i=0; i< notelist_arrayLength; i++){ //iterate through notelist
+
+                                    var note_id = notelist_array[i]; //grab note details for each note
+                                    
+                                    /*Set request for note details*/
+                                    var xhr1 = new XMLHttpRequest(); 
+                                    var url1 = _this.api_url + "api/notes/" + notelist_array[i];
+                                    xhr1.open("GET",url1,false); //synchronous request
+                                    xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                                    xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
+                                    xhr1.setRequestHeader("Session-Token",_this.sess_cookie);
+                                    xhr1.onreadystatechange = function(){
+                                        if (xhr1.readyState == 4){
+                                            
+                                            var raw_data1 = xhr1.responseText;
+                                            var data1 =JSON.parse(raw_data1);
+
+                                            if (xhr1.status == 200){
+
+                                                var note = data1.values;
+
+                                                var note_inline = note.inline_text;
+                                                var note_text =  note.note_text;
+                                                var note_contributor_id = note.perooz_contributor_id;
+                                                
+                                                //display note and contributor details
+                                                $('#peroozMain').append('<div id="' + notelist_array[i] + ' peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                                                            <div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> \
+                                                                            <div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> \
+                                                                        </div>');
+
+                                                //check if annotation is by this contributor
+                                                // if (pz_contributor_id == note_contributor_id){
+                                                //     $('#' + notelist_array[i]).append('<button class="peroozStyle peroozNote" id="' + notelist_array[i] + '"></button><br/>');
+
+                                                //     $('#' + notelist_array[i]).on('click',function(){
+                                                //         $('#' + notelist_array[i]).append('<input id="peroozNoteEdit" class="peroozStyle"></input><br/> \
+                                                //                                        <button class="peroozStyle" id="peroozNoteEditSave"></button> \
+                                                //                                        <button class="peroozStyle" id="peroozNoteEditCancel"></button>');
+                                                //     });
+
+
+                                                // }
+
+                                                
+
+
+
+                                                //add an line image afer note if not the last in the notegroup
+                                                    
+                                            }
+                                        }
+                                    }
+                                    xhr1.send();
+
+                                } 
+
+                            }
+                        }
+
+                        start_id += 1; 
+                    }
+                    xhr.send();
+                }
+            });
+
 
         },
 
