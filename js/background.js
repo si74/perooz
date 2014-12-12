@@ -214,8 +214,6 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 				});
 			});
 
-			
-
 			/*(4)Prep the the xmlhttprequest*/
 			var xhr = new XMLHttpRequest();
 			var url = api_url + "api/search/articles?url=" + encodeURIComponent(url_adjusted); 

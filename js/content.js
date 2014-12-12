@@ -215,9 +215,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                         var note_contributor_id = note.perooz_contributor_id;
                             			
                       					//display note and contributor details
-                      					$('#peroozMain').append('<div id="' + notelist_array[i] + '" class="peroozStyle peroozNote"> \
-                      												<div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> <br/><br/> \
-                      												<div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> <br/><br/> \
+                      					$('#peroozMain').append('<div id="' + notelist_array[i] + ' peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                      												<div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> \
+                      												<div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> \
                       										    </div>');
 
                                         //check if annotation is by this contributor
@@ -297,7 +297,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 return;
             }
 
-            var pz_contributor_id = null; 
+            var pz_contributor_id = null;
 
             /*Grab contributor id from the database if it is present*/
             var xhr = new XMLHttpRequest();
@@ -317,6 +317,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 }
             }
             xhr.send();
+            console.log(_this.sess_cookie);
+            console.log(pz_contributor_id);
             if (!pz_contributor_id){
                 $(".peroozStyle#peroozMessage").html('Insufficient permission to create annotation.');
                 return;
@@ -328,8 +330,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             if (article_selector){
                 _this.pz_article_id = $(".peroozStyle#perooz_article_id").innerText();
             }
-
-            console.log(_this.pz_article_id);
 
             if (!_this.pz_article_id){ //if not in db, add current article to db
 
@@ -346,12 +346,12 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         var data=JSON.parse(raw_data);
 
                         if (xhr.status == 200 && data.message == "OK"){
-                            _this.pz_article_id = data.perooz_article_id;
+                            _this.pz_article_id = data.values;
                             console.log('Good');
                         }
                     }
                 }
-                xhr.send("article_hyperlink=" + _this.article_url + "&approved=0s");
+                xhr.send("article_hyperlink=" + _this.article_url + "&approved=0");
             }
 
             /*If article not properly inserted into db*/

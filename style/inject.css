@@ -20,58 +20,72 @@
 /*Close button style*/
 .peroozStyle#peroozClose{
 	display:inline-block;
-	font-size:0.6em;
-	color:#ff6600;
-	background-color:#fff;
-	border:1px solid #ff6600;
-	height:2.5em;
-	width:5em;
+	font-size:0.8em;
+	color:#fff;
+	background-color:#19486a;
+	border:1px solid #FFF;
+	padding: 10px;
+	/*height:2.5em;*/
+	width:100%;
+	margin:0px;
 }
 
 .peroozStyle#peroozBody{
-
+	height:100%;
+	width:100%;
+	background-color:#f6f6f6;
+	border-left: 1px #262626 solid;
 }
 
 .peroozStyle#peroozMain{
-	position:fixed;
-	padding-left:1.5em;
-	padding-right:1.5em;
-	padding-top:150px;
-	width:330px;
-	height:80%;
+	/*position:fixed;
+	padding-left:3em;
+	padding-right:1.5em;*/
+	padding-top:1.5em;
+	width:360px;
+	height:95%;
 	padding-bottom:1em;
 	overflow:scroll;
+	margin:0px auto;
+	background-color:#f6f6f6;
 }
 
-.peroozStyle#peroozTxt{
+/**.peroozStyle#peroozTxt{
 	font-weight:bold;
 	font-style:italic;
-}
+}*/
 
 .peroozStyle#peroozNotegroup{
 	cursor:pointer;
 }
 
-.peroozStyle#peroozNote{
-	width:320px;
-	border: 1px solid #ff6600;
+/*BUG - can't apply style via stylesheet so have to do inline*/
+/*.peroozStyle#peroozNote{
+	width:300px;
 	border-radius: 4px;
-}
+	background-color:#ff0000;
+	border-bottom: 1px solid #999;
+	width:300px;
+}*/
 
 .peroozStyle#peroozNoteInline{
-	width:310px;
-	font-style:italic;
+	width:300px;
 	font-weight:bold;
-	color:#17c6fd;
+	color:#4a4a4a;
+	background-color:#fff;
 	font-size:0.8em;
+	padding:1em;
 }
 
 .peroozStyle#peroozNoteText{
-	width:310px;
+	width:300px;
+	padding:1em;
+
 	font-style:normal;
 	font-weight:normal;
-	color:#000;
-	font-size:0.9em;
+	color:#999;
+	background-color:#fff;
+	font-size:0.8em;
 }
 
 /*Perooz annotation details*/
@@ -93,9 +107,9 @@
 	user-select: none;
 	background-image: none;
 	background-color: #fff;
-	border: 1px solid #ff6600;
+	border: 1px solid #19486a;
 	border-radius: 4px;
-	color: #ff6600;
+	color: #19486a;
 	font-family: 'Lato', sans-serif;
 }
 
