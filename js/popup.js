@@ -53,11 +53,11 @@ $(document).ready(function(){
 		if (cookie){
 			/*Set main popup menu*/
 			var menu = "<div class='logout_container'> \
-							<img src='images/Perooz_Logo_400dark.png' alt='Perooz' style='height:5em;width:auto;'> <br/><br/> \
+							<img src='images/Perooz_Logo_400.png' alt='Perooz' style='height:5em;width:auto;'> <br/><br/> \
 							<div id='instructions'> \
 								<div id='instructions1'> \
 									<div id='int1text'> \
-										<b>READ ANNOTATIONS:</b> <br/> If you see a <img src='images/icon_tiny_38.png' alt='annotation'> icon, there are annotations. \
+										<b>READ ANNOTATIONS:</b> <br/> If you see a <img src='images/lens_icon.png' alt='annotation'> icon, there are annotations. \
 										Simply click the icon to see more. \
 									</div> \
 								</div> <br/>\
@@ -65,7 +65,7 @@ $(document).ready(function(){
 									<div id='int2text'> \
 										<b>CREATE ANNOTATIONS:</b> <br/> Select the text you wish to annotate. \
 										A [+] icon will appear, which you can click to create the annotation. \
-										<br/> Alternatively, you can right click and select <img src='images/icon_tiny_38.png' alt='annotation'> Create Perooz annotation. \
+										<br/> Alternatively, you can right click and select <img src='images/lens_icon.png' alt='annotation'> Create Perooz annotation. \
 									</div> \
 								</div> \
 							</div> <br/>\
@@ -131,7 +131,7 @@ $(document).ready(function(){
 					if (nonce){
 						/*Display login form if nonce received*/
 						var nonce_string = "<div class='login_container'> \
-												<div id='logo'><img src='images/Perooz_Logo_400dark.png' alt='Perooz' style='height:10em;width:auto;'></div> \
+												<div id='logo'><img src='images/Perooz_Logo_400.png' alt='Perooz' style='height:10em;width:auto;'></div> \
 													<form id='login_form'>\
 														<input id='nonce_id' type='hidden' name='" + nonce + "' /> \
 														<input id='username' type='text' name='username' placeholder='username'/><br/> \
@@ -176,11 +176,11 @@ $(document).ready(function(){
 
 											/*Set main popup menu items*/
 											var menu = "<div class='logout_container'> \
-																		<img src='images/Perooz_Logo_400dark.png' alt='Perooz' style='height:5em;width:auto;'> <br/><br/> \
+																		<img src='images/Perooz_Logo_400.png' alt='Perooz' style='height:5em;width:auto;'> <br/><br/> \
 																		<div id='instructions'> \
 																			<div id='instructions1'> \
 																				<div id='int1text'> \
-																					<b>READ ANNOTATIONS:</b> <br/> If you see a <img src='images/icon_tiny_38.png' alt='annotation'> icon, there are annotations. \
+																					<b>READ ANNOTATIONS:</b> <br/> If you see a <img src='images/lens_icon.png' alt='annotation'> icon, there are annotations. \
 																					Simply click the icon to see more. \
 																				</div> \
 																			</div> <br/>\
@@ -188,7 +188,7 @@ $(document).ready(function(){
 																				<div id='int2text'> \
 																					<b>CREATE ANNOTATIONS:</b> <br/> Select the text you wish to annotate. \
 																					A [+] icon will appear, which you can click to create the annotation. \
-																					<br/> Alternatively, you can right click and select <img src='images/icon_tiny_38.png' alt='annotation'> Create Perooz annotation. \
+																					<br/> Alternatively, you can right click and select <img src='images/lens_icon.png' alt='annotation'> Create Perooz annotation. \
 																				</div> \
 																			</div> \
 																		</div> <br/>\

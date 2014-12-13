@@ -4,7 +4,7 @@
   "version" : "1.0",
   "description": "The Perooz Chrome extension changes the way you view the world. Providing insights from experts both reknowned and local, it gives you an unparalleled series of lenses through which to peruse the news.",
    "browser_action": {
-   	"default_icon": "images/icon_mini_38.png",
+   	"default_icon": "images/icon_minilight_38.png",
    	"default_popup": "popup.html"
    	}, 
   "background": {
@@ -28,7 +28,7 @@
   "cookies",
   "background"],
   "icons": {
-    "16": "images/icon_mini_38.png"
+    "16": "images/icon_minilight_38.png"
   },
   "web_accessible_resources":[
     "images/*.png",

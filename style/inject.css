@@ -22,7 +22,7 @@
 	display:inline-block;
 	font-size:0.8em;
 	color:#fff;
-	background-color:#19486a;
+	background-color:#00adee;
 	border:1px solid #FFF;
 	padding: 10px;
 	/*height:2.5em;*/
@@ -76,7 +76,7 @@
 .peroozStyle#peroozNoteInline{
 	width:300px;
 	font-weight:bold;
-	color:#4a4a4a;
+	color:#2a2a2a;
 	background-color:#fff;
 	font-size:0.8em;
 	padding:1em;
@@ -84,12 +84,14 @@
 
 .peroozStyle#peroozNoteText{
 	width:300px;
-	padding:1em;
-
+	padding:0.5em;
 	font-style:normal;
 	font-weight:normal;
 	color:#999;
 	background-color:#fff;
+	border: 1px solid #999;
+	border-radius: 4px;
+	margin-left:10px;
 	font-size:0.8em;
 }
 
@@ -98,7 +100,7 @@
 	padding:1em;
 	font-style:normal;
 	font-weight:normal;
-	color:#999;
+	color:#696969;
 	background-color:#fff;
 	font-size: 0.6em;
 	text-align:right;
@@ -123,14 +125,39 @@
 	user-select: none;
 	background-image: none;
 	background-color: #fff;
-	border: 1px solid #19486a;
+	border: 1px solid #00adee;
 	border-radius: 4px;
-	color: #19486a;
+	color: #00adee;
 	font-family: 'Lato', sans-serif;
 }
 
 .peroozStyle#perooz-mouseicon.active {
 	display: inline-block;
+}
+
+.peroozStyle#peroozCreateNote{
+	width:178px;
+	height:5em;
+	margin:1em;
+	padding:1em;
+	font-size:1em;
+	text-align:center;
+}
+
+.peroozStyle#peroozSubmit{
+	width:184px;
+	height:1em;
+	margin:0.25em;
+	font-size:0.9em;
+	background-color:#00adee;
+	border:none;
+	color:#FFF;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.peroozStyle#peroozMessage{
+	color:#999;
 }
 
 

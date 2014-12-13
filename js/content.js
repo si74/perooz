@@ -76,9 +76,11 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
     		$peroozSidebar.html('<div id="peroozBody" class="peroozStyle"> \
                                      <button id="peroozClose" class ="peroozStyle">close</button> \
                                      <div id="peroozMain" class="peroozStyle"> \
-                                        <div id="peroozTxt" class="peroozStyle"> "' + selection + '"<div><br/> \
-        					            <input id="peroozNote" class="peroozStyle"></input><br/> \
-        					            <button id="peroozSubmit" class="peroozStyle">submit</button> \
+                                        <div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                            <div id="peroozNoteInline" class="peroozStyle"> "' + selection + '"</div> \
+            					            <input id="peroozCreateNote" class="peroozStyle"></input><br/> \
+            					            <button id="peroozSubmit" class="peroozStyle">submit</button> \
+                                        </div> \
                                         <div id="peroozMessage" class="peroozStyle"></div> \
                                      </div> \
                                  </div>');
@@ -512,7 +514,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                     var data1 =JSON.parse(raw_data1);
                                     if (xhr1.status == 200){
                                         var notegroup_info = data1.values;
-                                        var img_url = chrome.extension.getURL("images/icon_tiny_38.png");
+                                        var img_url = chrome.extension.getURL("images/lens_icon.png");
 
                                         var needle = notegroup_info.note_text_overlap;
                                         var haystack = document.body;
