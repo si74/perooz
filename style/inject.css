@@ -136,7 +136,7 @@
 }
 
 .peroozStyle#peroozCreateNote{
-	width:178px;
+	width:260px;
 	height:5em;
 	margin:1em;
 	padding:1em;
@@ -146,9 +146,9 @@
 
 .peroozStyle#peroozSubmit{
 	width:184px;
-	height:1em;
-	margin:0.25em;
-	font-size:0.9em;
+	height:2em;
+	font-size:0.7em;
+	padding-left:1em;
 	background-color:#00adee;
 	border:none;
 	color:#FFF;
