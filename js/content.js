@@ -157,18 +157,20 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
     			_this.deactivateSidebar();
     		});
 
-            $(".peroozStyle#pMain").on('click',function(){
+            _this.readNotes(notegroup_id);
 
+            $(".peroozStyle#pMain").on('click',function(notegroup_id){
+                _this.readNotes()
             });
 
             $('.peroozStyle#pMain1').on('click',function(){
-                $('peroozMain').html('<div>These are the local notes</div>');
+                $('#peroozMain').html('<div>These are the local notes</div>');
                 _this.readLocalNotes();
             });
 
-            _this.readNotes(notegroup_id);
-
-
+            $('.peroozStyle#pMain2').on('click',function(){
+                $('#peroozMain').html('<div>These are the sources</div>');
+            });
 
         },
 
