@@ -80,6 +80,7 @@
 	background-color:#fff;
 	font-size:0.8em;
 	padding:1em;
+	word-wrap:break-word;
 }
 
 .peroozStyle#peroozNoteText{
@@ -93,6 +94,7 @@
 	border-radius: 4px;
 	margin-left:10px;
 	font-size:0.8em;
+	word-wrap:break-word;
 }
 
 .peroozStyle#peroozNoteAuthor{
@@ -135,30 +137,83 @@
 	display: inline-block;
 }
 
+/*Perooz Note Creation Style*/
+.peroozStyle#peroozCNote{
+	background-color:#fff;
+	box-shadow: 0px 0px 10px #d0d0d0;
+	width:340px;
+	margin:10px;
+	padding:1em;
+}
+
 .peroozStyle#peroozCreateNote{
 	width:260px;
 	height:5em;
 	margin:1em;
 	padding:1em;
-	font-size:1em;
-	text-align:center;
+	font-size:0.7em;
+	color:#999;
 }
 
 .peroozStyle#peroozSubmit{
 	width:184px;
-	height:2em;
 	font-size:0.7em;
-	padding-left:1em;
-	background-color:#00adee;
+	padding-top:0.5em;
+	padding-bottom:0.5em;
+	margin:1em;
 	border:none;
+	background-color:#999;
 	color:#FFF;
 	cursor: pointer;
 	cursor: hand;
+	text-align:center;
 }
 
 .peroozStyle#peroozMessage{
 	color:#999;
 }
 
+/*Perooz Menu Style*/
+.peroozStyle#peroozBodyMenu{
+	width:100%;
+	float:left;
+	border:none;
+	text-align:center;
+	padding-left:2.5px;
+	padding-right:2.5px;
+}
 
+.peroozStyle#pMain{
+	display:inline-block;
+	float:left;
+	/*background-color:#999;*/
+	border:none;
+	color:#fff;
+	font-size:0.6em;
+	padding-bottom:0.5em;
+	padding-top:0.5em;
+	width:110px;
+}
 
+.peroozStyle#pMain1{
+	display:inline-block;
+	/*background-color:#999;*/
+	border:none;
+	color:#fff;
+	font-size:0.6em;
+	padding-bottom:0.5em;
+	padding-top:0.5em;
+	width:110px;
+}
+
+.peroozStyle#pMain2{
+	display:inline-block;
+	float:right;
+	/*background-color:#999;*/
+	border:none;
+	color:#fff;
+	font-size:0.6em;
+	padding-bottom:0.5em;
+	padding-top:0.5em;
+	width:110px;
+}
