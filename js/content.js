@@ -159,8 +159,10 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             _this.readNotes(notegroup_id);
 
-            $(".peroozStyle#pMain").on('click',function(notegroup_id){
-                _this.readNotes()
+            $(".peroozStyle#pMain").on('click',function(){
+                console.log(notegroup_id);
+                $("#peroozMain").html('<div id="peroozMessage" class="peroozStyle"></div>');
+                _this.readNotes(notegroup_id);
             });
 
             $('.peroozStyle#pMain1').on('click',function(){
@@ -170,6 +172,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             $('.peroozStyle#pMain2').on('click',function(){
                 $('#peroozMain').html('<div>These are the sources</div>');
+                _this.readSources();
             });
 
         },
