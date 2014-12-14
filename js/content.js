@@ -27,6 +27,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             top: -9999, 
             left: -9999
         },
+        localNotes: [],
 
         /*--------------------------------------------------------------*/
         /*Open sidebar for note creation*/
@@ -162,17 +163,26 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             $(".peroozStyle#pMain").on('click',function(){
                 console.log(notegroup_id);
                 $("#peroozMain").html('<div id="peroozMessage" class="peroozStyle"></div>');
+                $(this).css("background-color","#2a2a2a");
+                $('.peroozStyle#pMain1').css("background-color","#999");
+                $('.peroozStyle#pMain2').css("background-color","#999");
                 _this.readNotes(notegroup_id);
             });
 
             $('.peroozStyle#pMain1').on('click',function(){
                 $('#peroozMain').html('<div>These are the local notes</div>');
+                $(this).css("background-color","#2a2a2a");
+                $('.peroozStyle#pMain').css("background-color","#999");
+                $('.peroozStyle#pMain2').css("background-color","#999");
                 _this.readLocalNotes();
             });
 
             $('.peroozStyle#pMain2').on('click',function(){
                 $('#peroozMain').html('<div>These are the sources</div>');
-                _this.readSources();
+                $(this).css("background-color","#2a2a2a");
+                $('.peroozStyle#pMain').css("background-color","#999");
+                $('.peroozStyle#pMain1').css("background-color","#999");
+                _this.readSources(_this.article_url);
             });
 
         },
@@ -370,10 +380,34 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         /*Temporary hack - reads the locally stored user notes*/
         readLocalNotes: function(){
 
+            $(_this.localNotes).each(obj, function(key,value)){
+                $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                            <div id="peroozNoteInline" class="peroozStyle">' + key + '</div> \
+                                            <div id="peroozNoteText" class="peroozStyle">' + value + '</div> \
+                                        </div>');
+            }
+
         },
 
         /*Temporary hack - makes request to local server*/
-        readSources: function(){
+        readSources: function(article_url){
+
+            var xhr = new XMLHttpRequest();
+            var url = 'http://localhost:8000/app'; 
+            xhr.open("POST", url, false); //note that this is a synchronous request
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+            xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
+
+                    if (xhr.status == 200){
+                    }
+                }
+            }
+            xhr.send();
 
         },
 
@@ -408,6 +442,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             var message = '';
             var in_db = false;
+
+            /*TEMP HACK - APPEND TO LOCAL STORAGE*/
+            _this.localNotes.push({"inline": selection, "note": note});
 
             /*Retrieve session token*/
             if (!_this.sess_cookie){
