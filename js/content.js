@@ -93,8 +93,8 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             //submit annotation to temp db
     		$(".peroozStyle#peroozSubmit").on('click',function(){
-    			if ($(".peroozStyle#peroozNote").val().length > 0){
-    				var annotation = $(".peroozStyle#peroozNote").val();
+    			if ($(".peroozStyle#peroozCreateNote").val().length > 0){
+    				var annotation = $(".peroozStyle#peroozCreateNote").val();
                     var result = _this.createNote(selection,annotation);
                     //$(".peroozStyle#peroozMessage").html('Annotation successfully created!')
     			}else{
@@ -170,7 +170,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             });
 
             $('.peroozStyle#pMain1').on('click',function(){
-                $('#peroozMain').html('<div>These are the local notes</div>');
+                $('#peroozMain').html('<div id="peroozMessage" class="peroozStyle"></div>');
                 $(this).css("background-color","#2a2a2a");
                 $('.peroozStyle#pMain').css("background-color","#999");
                 $('.peroozStyle#pMain2').css("background-color","#999");
@@ -380,12 +380,12 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         /*Temporary hack - reads the locally stored user notes*/
         readLocalNotes: function(){
 
-            $(_this.localNotes).each(obj, function(key,value)){
+            $.each(_this.localNotes, function(i,val){
                 $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
-                                            <div id="peroozNoteInline" class="peroozStyle">' + key + '</div> \
-                                            <div id="peroozNoteText" class="peroozStyle">' + value + '</div> \
+                                            <div id="peroozNoteInline" class="peroozStyle">' + val.inline + '</div> \
+                                            <div id="peroozNoteText" class="peroozStyle">' + val.note + '</div> \
                                         </div>');
-            }
+            });
 
         },
 
@@ -444,7 +444,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             var in_db = false;
 
             /*TEMP HACK - APPEND TO LOCAL STORAGE*/
-            _this.localNotes.push({"inline": selection, "note": note});
+            _this.localNotes.push({'inline': selection, 'note': note});
 
             /*Retrieve session token*/
             if (!_this.sess_cookie){
