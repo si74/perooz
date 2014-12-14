@@ -178,7 +178,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             });
 
             $('.peroozStyle#pMain2').on('click',function(){
-                $('#peroozMain').html('<div>These are the sources</div>');
+                $('#peroozMain').html('<div id="peroozMessage" class="peroozStyle"></div>');
                 $(this).css("background-color","#2a2a2a");
                 $('.peroozStyle#pMain').css("background-color","#999");
                 $('.peroozStyle#pMain1').css("background-color","#999");
@@ -392,23 +392,38 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         /*Temporary hack - makes request to local server*/
         readSources: function(article_url){
 
-            var xhr = new XMLHttpRequest();
-            var url = 'http://localhost:8000/app'; 
-            xhr.open("POST", url, false); //note that this is a synchronous request
-            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-            xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
-            xhr.setRequestHeader("Session-Token",_this.sess_cookie);
-            xhr.onreadystatechange = function(){
-                if (xhr.readyState == 4){
-                    var raw_data = xhr.responseText;
-                    var data=JSON.parse(raw_data);
+            // var xhr = new XMLHttpRequest();
+            // var url = 'http://localhost:8000/getSources/'; 
+            // xhr.open("GET", url, false); //note that this is a synchronous request
+            // xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            // xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+            // xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+            // xhr.onreadystatechange = function(){
+            //     if (xhr.readyState == 4){
+            //         var raw_data = xhr.responseText;
+            //         var data=JSON.parse(raw_data);
 
-                    if (xhr.status == 200){
-                    }
-                }
-            }
-            xhr.send();
+            //         if (xhr.status == 200){
+            //         }
+            //     }
+            // }
+            // xhr.send();
+            // 
+            // 
+            $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                        <div id="peroozNoteInline" class="peroozStyle">' + 'Romney Campaigns With Iowa Senate Candidate Ernst' + '</div> \
+                                        <div id="peroozNoteText" class="peroozStyle">' + '<a target="_blank" href="http://www.nytimes.com/aponline/2014/10/12/us/politics/ap-us-romney-iowa-senate.html">http://www.nytimes.com/aponline/2014/10/12/us/politics/ap-us-romney-iowa-senate.html</a>' + '</div><br/> \
+                                    </div>');
 
+            $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                        <div id="peroozNoteInline" class="peroozStyle">' + 'Chamber Ads Aid Momentum for Iowa GOPs Joni Ernst' + '</div> \
+                                        <div id="peroozNoteText" class="peroozStyle">' + '<a target="_blank" href="http://www.nytimes.com/aponline/2014/05/27/us/ap-us-iowa-senate-ernst.html">http://www.nytimes.com/aponline/2014/05/27/us/ap-us-iowa-senate-ernst.html</a>' + '</div><br/> \
+                                    </div>');
+            
+            $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                        <div id="peroozNoteInline" class="peroozStyle">' + 'Dissatisfaction and Turnout Drove Republican Win' + '</div> \
+                                        <div id="peroozNoteText" class="peroozStyle">' + '<a target="_blank" href="http://www.nytimes.com/reuters/2014/09/19/us/politics/19reuters-usa-politics-iowa.html">http://www.nytimes.com/reuters/2014/09/19/us/politics/19reuters-usa-politics-iowa.html</a>' + '</div><br/> \
+                                    </div>');
         },
 
         /*Hide sidebar*/
