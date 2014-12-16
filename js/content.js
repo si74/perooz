@@ -390,40 +390,188 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         },
 
         /*Temporary hack - makes request to local server*/
-        readSources: function(article_url){
+        readSources: function(search_url){
 
-            // var xhr = new XMLHttpRequest();
-            // var url = 'http://localhost:8000/getSources/'; 
-            // xhr.open("GET", url, false); //note that this is a synchronous request
-            // xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-            // xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
-            // xhr.setRequestHeader("Session-Token",_this.sess_cookie);
-            // xhr.onreadystatechange = function(){
-            //     if (xhr.readyState == 4){
-            //         var raw_data = xhr.responseText;
-            //         var data=JSON.parse(raw_data);
+            /*Prep the the xmlhttprequest*/
+            var xhr = new XMLHttpRequest();
+            var url = "http://news.perooz.io/api/check_url.php"; 
+            xhr.open("POST", url, true); //trying to let it be asynchronous
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 
-            //         if (xhr.status == 200){
-            //         }
-            //     }
-            // }
-            // xhr.send();
-            // 
-            // 
-            $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
-                                        <div id="peroozNoteInline" class="peroozStyle">' + 'Romney Campaigns With Iowa Senate Candidate Ernst' + '</div> \
-                                        <div id="peroozNoteText" class="peroozStyle">' + '<a target="_blank" href="http://www.nytimes.com/aponline/2014/10/12/us/politics/ap-us-romney-iowa-senate.html">http://www.nytimes.com/aponline/2014/10/12/us/politics/ap-us-romney-iowa-senate.html</a>' + '</div><br/> \
-                                    </div>');
+            /*(5) If url is in database, call fxns from content script to display all annotation links*/
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
 
-            $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
-                                        <div id="peroozNoteInline" class="peroozStyle">' + 'Chamber Ads Aid Momentum for Iowa GOPs Joni Ernst' + '</div> \
-                                        <div id="peroozNoteText" class="peroozStyle">' + '<a target="_blank" href="http://www.nytimes.com/aponline/2014/05/27/us/ap-us-iowa-senate-ernst.html">http://www.nytimes.com/aponline/2014/05/27/us/ap-us-iowa-senate-ernst.html</a>' + '</div><br/> \
-                                    </div>');
-            
-            $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
-                                        <div id="peroozNoteInline" class="peroozStyle">' + 'Dissatisfaction and Turnout Drove Republican Win' + '</div> \
-                                        <div id="peroozNoteText" class="peroozStyle">' + '<a target="_blank" href="http://www.nytimes.com/reuters/2014/09/19/us/politics/19reuters-usa-politics-iowa.html">http://www.nytimes.com/reuters/2014/09/19/us/politics/19reuters-usa-politics-iowa.html</a>' + '</div><br/> \
-                                    </div>');
+                    //If article successfully exists in the db
+                    if (xhr.status == 200){
+
+                        //extract the perooz id of the article
+                        var title = data.title; 
+                        var author = data.author;
+
+                        // Get the top entity and top three keywords - pull from Reddit
+                        var top_entity = data.entities[0]['text'];
+                        var top_keywords = []; 
+                        top_keywords.push(data.keywords[0]['text']);
+                        top_keywords.push(data.keywords[1]['text']);
+                        top_keywords.push(data.keywords[2]['text']);
+
+                        console.log(top_entity);
+                    
+                        //Pull NYTimes Blogs Links
+                        //pullTimes(top_entity);
+
+                        //grab stuff from reddit
+                        _this.pullReddit(top_entity,top_keywords);
+
+                        _this.pullRedditAMA(top_entity,top_keywords);
+
+                    }
+                }
+            }
+            xhr.send("search_url=" + search_url);
+        },
+
+        pullReddit: function(ents,keywords){
+
+            var ents_array = ents.split(" ");
+            var ents_search_string = ''; 
+            $.each(ents_array, function(i){
+                ents_search_string += (ents_array[i] + "+");
+            });
+            ents_search_string = ents_search_string.substring(0, ents_search_string.length - 1);
+
+            /*Search for general reddit posts*/
+            var xhr = new XMLHttpRequest();
+            var url = "http://www.reddit.com/r/api/search.json?q=" + ents_search_string + "&limit=3&sort=hot"; 
+            xhr.open("GET", url, true); //trying to let it be asynchronous
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
+
+                    //If article successfully exists in the db
+                    if (xhr.status == 200){
+
+                        //iterate through results and append to page
+                        var results = data['data']['children'];
+                        var posts = []; 
+
+                        //iterate through and grab useful info
+                        $.each(results,function(i){
+                            var temp = {};
+                            var data = results[i]['data'];
+
+                            $.each(data,function(key,val){
+                                if (key == 'thumbnail' || key == 'permalink' || key == 'url' || key == 'title' || key == 'id'){
+                                    temp[key] = val; 
+                                }
+                            });
+
+                            posts.push(temp);
+                            
+                        });
+
+                        $.each(posts,function(i){
+
+                            //console.log(post['id']);
+                            var img_url = '';
+                            if ("thumbnail" in posts[i]){
+                                img_url = posts[i]['thumbnail'];
+                            }else{
+                                img_url = ''; 
+                            }
+                            console.log(posts[i]['permalink']);
+                            $('#peroozMain').append('<div class="peroozStyle" id="peroozNote" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                                        <div class="peroozStyle" id="peroozNoteInline">Reddit: ' + posts[i]['title'] + '</div> \
+                                                        <div class="peroozStyle" id="peroozNoteText"><a target="_blank" href="http://www.reddit.com' + posts[i]['permalink'] + '">Comments</a></div> \
+                                                        <div class="peroozStyle" id="peroozPic"><img src="' + img_url + '" /></div> \
+                                                    </div>');
+
+                        });  
+                        
+                        
+
+                    }
+
+                        
+                }
+            }
+            xhr.send(); 
+
+        },
+
+        pullRedditAMA: function(ents,keywords){
+
+            var ents_array = ents.split(" ");
+            var ents_search_string = ''; 
+            $.each(ents_array, function(i){
+                ents_search_string += (ents_array[i] + "+");
+            });
+            ents_search_string = ents_search_string.substring(0, ents_search_string.length - 1);
+
+            /*Search for general reddit posts*/
+            var xhr = new XMLHttpRequest();
+            var url = "http://www.reddit.com/r/IAma/search.json?q=" + ents_search_string + "&limit=2&sort=relevance&restrict_sr=1"; 
+            xhr.open("GET", url, true); //trying to let it be asynchronous
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
+
+                    //If article successfully exists in the db
+                    if (xhr.status == 200){
+
+                        //iterate through results and append to page
+                        var results = data['data']['children'];
+                        var posts = []; 
+
+                        //iterate through and grab useful info
+                        $.each(results,function(i){
+                            var temp = {};
+                            var data = results[i]['data'];
+
+                            $.each(data,function(key,val){
+                                if (key == 'thumbnail' || key == 'permalink' || key == 'url' || key == 'title' || key == 'id'){
+                                    temp[key] = val; 
+                                }
+                            });
+
+                            posts.push(temp);
+                            
+                        });
+
+                        $.each(posts,function(i){
+
+                            //console.log(post['id']);
+                            var img_url = '';
+                            if ("thumbnail" in posts[i]){
+                                img_url = posts[i]['thumbnail'];
+                            }else{
+                                img_url = ''; 
+                            }
+                            
+                            $('#peroozMain').append('<div class="peroozStyle" id="peroozNote" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                                        <div class="peroozStyle" id="peroozNoteInline">Reddit: ' + posts[i]['title'] + '</div> \
+                                                        <div class="peroozStyle" id="peroozNoteText"><a target="_blank" href="http://www.reddit.com' + posts[i]['permalink'] + '">Comments</a></div> \
+                                                        <div class="peroozStyle" id="peroozPic"><img src="' + img_url + '" /></div> \
+                                                    </div>');
+
+                        });  
+                        
+                        
+
+                    }
+
+                        
+                }
+            }
+            xhr.send(); 
+
         },
 
         /*Hide sidebar*/

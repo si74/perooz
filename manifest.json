@@ -23,6 +23,8 @@
 	"permissions" : ["activeTab",
   "tabs",
   "https://dev.perooz.io/api/*",
+  "https://news.perooz.io/api/*",
+  "http://www.reddit.com/r/*",
   "storage",
   "contextMenus",
   "cookies",
