@@ -407,26 +407,25 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                     //If article successfully exists in the db
                     if (xhr.status == 200){
 
-                        //extract the perooz id of the article
-                        var title = data.title; 
-                        var author = data.author;
-
-                        // Get the top entity and top three keywords - pull from Reddit
-                        var top_entity = data.entities[0]['text'];
-                        var top_keywords = []; 
-                        top_keywords.push(data.keywords[0]['text']);
-                        top_keywords.push(data.keywords[1]['text']);
-                        top_keywords.push(data.keywords[2]['text']);
-
-                        console.log(top_entity);
+                        var search_string = '';
+                        var keywords = data.keywords;
+                        $.each(keywords,function(i){
+                            if (i < 2){
+                                if (i == 0){
+                                    search_string += keywords[i]['text'];
+                                }else{
+                                    search_string += ' ' + keywords[i]['text'];
+                                }
+                            }
+                        });
                     
                         //Pull NYTimes Blogs Links
-                        _this.pullTimes(top_entity,top_keywords);
+                        _this.pullTimes(search_string);
 
                         //grab stuff from reddit
-                        _this.pullReddit(top_entity,top_keywords);
+                        _this.pullReddit(search_string);
 
-                        _this.pullRedditAMA(top_entity,top_keywords);
+                        _this.pullRedditAMA(search_string);
 
                     }
                 }
@@ -434,7 +433,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             xhr.send("search_url=" + search_url);
         },
 
-        pullReddit: function(ents,keywords){
+        pullReddit: function(ents){
 
             var ents_array = ents.split(" ");
             var ents_search_string = ''; 
@@ -445,7 +444,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
             /*Search for general reddit posts*/
             var xhr = new XMLHttpRequest();
-            var url = "http://www.reddit.com/r/api/search.json?q=" + ents_search_string + "&limit=3&sort=hot"; 
+            var url = "http://www.reddit.com/r/api/search.json?q=" + ents_search_string + "&limit=3&sort=relevance"; 
             xhr.open("GET", url, true); //trying to let it be asynchronous
             xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             xhr.onreadystatechange = function(){
@@ -504,7 +503,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
         },
 
-        pullRedditAMA: function(ents,keywords){
+        pullRedditAMA: function(ents){
 
             var ents_array = ents.split(" ");
             var ents_search_string = ''; 
@@ -574,7 +573,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
         },
 
-        pullTimes: function(ents,keywords){
+        pullTimes: function(ents){
 
             var ents_array = ents.split(" ");
             var ents_search_string = ''; 
