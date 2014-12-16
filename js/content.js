@@ -602,11 +602,10 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         $.each(results,function(i){
                             if (i < 3){
 
-                                $('#Main').append('<div class="rPost"> \
-                                            <div class="rSource"> <b> NY Times Blogs </b> </div> \
-                                            <div class="rTitle">' + results[i]['snippet'] + '</div> \
-                                            <div class="rPerm"><a target="_blank" href="http://www.reddit.com' + results[i]['web_url'] + '">See blog!</a></div> \
-                                          </div>');
+                                $('#peroozMain').append('<div class="peroozStyle" id="peroozNote" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                                        <div class="peroozStyle" id="peroozNoteInline">NYTimesBlogs: ' + results[i]['snippet'] + '</div> \
+                                                        <div class="peroozStyle" id="peroozNoteText"><a target="_blank" href="' + results[i]['web_url'] + '">See blog!</a></div><br/> \
+                                                         </div>');
 
                             }
                         });
@@ -800,7 +799,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                         var needle = notegroup_info.note_text_overlap;
                                         var haystack = document.body;
 
-                                        needle = _this.getLastWords(needle, 3); //first grab last three words in annotation overlap
+                                        needle = _this.getLastWords(needle, 5); //first grab last three words in annotation overlap
                                         replacement = needle + ' <button style="background:url(' + img_url + ');background-repeat: no-repeat;height:16px;width:15px;margin:0px;padding:1px;border:0px;display:inline-block;" id="'+ notegroup_array[i] +'" class="peroozStyle peroozNotegroup"></button>'; //div tag with relevant info 
                                         _this.findAndReplace(needle, replacement, haystack);
 
