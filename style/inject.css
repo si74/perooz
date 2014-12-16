@@ -108,6 +108,10 @@
 	text-align:right;
 }
 
+.peroozStyle#peroozPic{
+	padding:1em;
+}
+
 /*Perooz annotation details*/
 .peroozStyle#perooz-mouseicon {
 	position: absolute !important;

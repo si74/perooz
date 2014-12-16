@@ -421,7 +421,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         console.log(top_entity);
                     
                         //Pull NYTimes Blogs Links
-                        //pullTimes(top_entity);
+                        _this.pullTimes(top_entity,top_keywords);
 
                         //grab stuff from reddit
                         _this.pullReddit(top_entity,top_keywords);
@@ -572,6 +572,49 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             }
             xhr.send(); 
 
+        },
+
+        pullTimes: function(ents,keywords){
+
+            var ents_array = ents.split(" ");
+            var ents_search_string = ''; 
+            $.each(ents_array, function(i){
+                ents_search_string += (ents_array[i] + "+");
+            });
+            ents_search_string = ents_search_string.substring(0, ents_search_string.length - 1);
+
+            var xhr = new XMLHttpRequest();
+            var url = "http://api.nytimes.com/svc/search/v2/articlesearch.json?q=" + ents_search_string + "&fq=news_desk%3A%28%22blogs%22%29ANDpage%3A%28%221%22%29&fl=web_url%2Csnippet&api-key=e4d28186c9eb23f685a46de0f3719ddd%3A9%3A70390456"; 
+            xhr.open("GET", url, true); //trying to let it be asynchronous
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+
+            /*(5) If url is in database, call fxns from content script to display all annotation links*/
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState == 4){
+                    var raw_data = xhr.responseText;
+                    var data=JSON.parse(raw_data);
+
+                    //If article successfully exists in the db
+                    if (xhr.status == 200){
+
+                        var results = data['response']['docs'];
+
+                        $.each(results,function(i){
+                            if (i < 3){
+
+                                $('#Main').append('<div class="rPost"> \
+                                            <div class="rSource"> <b> NY Times Blogs </b> </div> \
+                                            <div class="rTitle">' + results[i]['snippet'] + '</div> \
+                                            <div class="rPerm"><a target="_blank" href="http://www.reddit.com' + results[i]['web_url'] + '">See blog!</a></div> \
+                                          </div>');
+
+                            }
+                        });
+
+                    }
+                }
+            }
+            xhr.send();
         },
 
         /*Hide sidebar*/

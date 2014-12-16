@@ -25,6 +25,7 @@
   "https://dev.perooz.io/api/*",
   "https://news.perooz.io/api/*",
   "http://www.reddit.com/r/*",
+  "http://api.nytimes.com/*",
   "storage",
   "contextMenus",
   "cookies",
