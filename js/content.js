@@ -410,11 +410,19 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         var search_string = '';
                         var keywords = data.keywords;
                         $.each(keywords,function(i){
-                            if (i < 2){
+                            var temp_string = keywords[i]['text'];
+                            var temp_array = temp_string.split(" ");
+                            if (temp_array.length > 2){
                                 if (i == 0){
-                                    search_string += keywords[i]['text'];
-                                }else{
-                                    search_string += ' ' + keywords[i]['text'];
+                                    search_string = keywords[i]['text'];
+                                }
+                            }else{
+                                if (i < 2){
+                                    if (i == 0){
+                                        search_string += keywords[i]['text'];
+                                    }else{
+                                        search_string += ' ' + keywords[i]['text'];
+                                    }
                                 }
                             }
                         });
