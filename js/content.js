@@ -74,8 +74,9 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
             }
 
             /*If text only contains less than words*/
-            var res = selection.split(" ");
-            if (res < 4){
+            var trimmed_selection = selection.trim();
+            var res = trimmed_selection.split(" ");
+            if (res.length < 4){
                 $peroozSidebar.html('<button id="peroozClose" class="peroozStyle">close</button> \
                                      <div id="peroozMain" class="peroozStyle"> \
                                         <div id="peroozTxt" class="peroozStyle">Error! Annotated text must be a minimum of 4 words.</div> \
