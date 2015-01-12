@@ -72,6 +72,19 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 });
                 return;
             }
+
+            /*If text only contains less than words*/
+            var res = selection.split(" ");
+            if (res < 4){
+                $peroozSidebar.html('<button id="peroozClose" class="peroozStyle">close</button> \
+                                     <div id="peroozMain" class="peroozStyle"> \
+                                        <div id="peroozTxt" class="peroozStyle">Error! Annotated text must be a minimum of 4 words.</div> \
+                                     </div>');
+                $(".peroozStyle#peroozClose").on('click',function(){
+                    _this.deactivateSidebar();
+                });
+                return;
+            }
        
             //set perooz sidebar menu
     		$peroozSidebar.html('<div id="peroozBody" class="peroozStyle"> \
