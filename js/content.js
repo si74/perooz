@@ -188,7 +188,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                 $(this).css("background-color","#2a2a2a");
                 $('.peroozStyle#pMain').css("background-color","#999");
                 $('.peroozStyle#pMain2').css("background-color","#999");
-                _this.readLocalNotes();
+                _this.readLocalNotes(notegroup_id);
             });
 
             $('.peroozStyle#pMain2').on('click',function(){
@@ -203,28 +203,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
 
         /*Load notegroup annotations*/
         readNotes: function(notegroup_id){
-        
-            /*Currently doing nothing with contributor id*/
-            // var pz_contributor_id = null; 
-
-            // /*Grab contributor id from session cookie*/
-            // var xhr = new XMLHttpRequest();
-            // var url = _this.api_url + "api/auth/get_contrib_from_sess.php"; 
-            // xhr.open("GET", url, false); //note that this is a synchronous request
-            // xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-            // xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
-            // xhr.setRequestHeader("Session-Token",_this.sess_cookie);
-            // xhr.onreadystatechange = function(){
-            //     if (xhr.readyState == 4){
-            //         var raw_data = xhr.responseText;
-            //         var data=JSON.parse(raw_data);
-
-            //         if (xhr.status == 200 && data.message == "OK"){
-            //             pz_contributor_id = data.perooz_contributor_id;
-            //         }
-            //     }
-            // }
-            // xhr.send();
 
             /*Grab notes for notegroup and place in the page*/
             var start_id = 0; 
@@ -277,25 +255,6 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                                                                     <div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> \
                                                                     <div id="peroozNoteAuthor" class="peroozStyle"> -' + author_name + '</div> \
                                                                 </div>');
-
-                                        //check if annotation is by this contributor
-                                        // if (pz_contributor_id == note_contributor_id){
-                                        //     $('#' + notelist_array[i]).append('<button class="peroozStyle peroozNote" id="' + notelist_array[i] + '"></button><br/>');
-
-                                        //     $('#' + notelist_array[i]).on('click',function(){
-                                        //         $('#' + notelist_array[i]).append('<input id="peroozNoteEdit" class="peroozStyle"></input><br/> \
-                                        //                                        <button class="peroozStyle" id="peroozNoteEditSave"></button> \
-                                        //                                        <button class="peroozStyle" id="peroozNoteEditCancel"></button>');
-                                        //     });
-
-
-                                        // }
-
-                                        
-
-
-
-                                        //add an line image afer note if not the last in the notegroup
                                             
                                     }
                                 }
@@ -392,14 +351,177 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
         },
 
         /*Temporary hack - reads the locally stored user notes*/
-        readLocalNotes: function(){
+        readLocalNotes: function(notegroup_id){
 
-            $.each(_this.localNotes, function(i,val){
-                $('#peroozMain').append('<div id="peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
-                                            <div id="peroozNoteInline" class="peroozStyle">' + val.inline + '</div> \
-                                            <div id="peroozNoteText" class="peroozStyle">' + val.note + '</div> \
-                                        </div>');
-            });
+            /*Grab contributor id from user session*/
+            var pz_contributor_id = null; 
+
+            // /*Grab contributor id from session cookie*/
+            var xhr0 = new XMLHttpRequest();
+            var url = _this.api_url + "api/auth/get_contrib_from_sess.php"; 
+            xhr0.open("GET", url, false); //note that this is a synchronous request
+            xhr0.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr0.setRequestHeader("Client-Id","13adfewasdf432dae");
+            xhr0.setRequestHeader("Session-Token",_this.sess_cookie);
+            xhr0.onreadystatechange = function(){
+                if (xhr0.readyState == 4){
+                    var raw_data0 = xhr0.responseText;
+                    var data0=JSON.parse(raw_data0);
+
+                    if (xhr0.status == 200 && data0.message == "OK"){
+                        pz_contributor_id = data0.perooz_contributor_id;
+                        console.log(pz_contributor_id);
+
+                        /*Grab notes for notegroup and place in the page*/
+                        var start_id = 0; 
+
+                        var xhr = new XMLHttpRequest();
+                        var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists" + "?start=" + start_id + "&max=7"; 
+                        xhr.open("GET", url, false); //note that this is a synchronous request
+                        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                        xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+                        xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+                        xhr.onreadystatechange = function(){
+                            if (xhr.readyState == 4){
+                                var raw_data = xhr.responseText;
+                                var data=JSON.parse(raw_data);
+
+                                if (xhr.status == 200){
+                                    
+                                    var notelist_array = data.values;
+                                    var notelist_arrayLength = notelist_array.length; //grab list of notes for notegroup
+
+                                    for (var i=0; i< notelist_arrayLength; i++){ //iterate through notelist
+
+                                        var note_id = notelist_array[i]; //grab note details for each note
+                                        
+                                        /*Set request for note details*/
+                                        var xhr1 = new XMLHttpRequest(); 
+                                        var url1 = _this.api_url + "api/notes/" + notelist_array[i];
+                                        xhr1.open("GET",url1,false); //synchronous request
+                                        xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                                        xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
+                                        xhr1.setRequestHeader("Session-Token",_this.sess_cookie);
+                                        xhr1.onreadystatechange = function(){
+                                            if (xhr1.readyState == 4){
+                                                
+                                                var raw_data1 = xhr1.responseText;
+                                                var data1 =JSON.parse(raw_data1);
+
+                                                if (xhr1.status == 200){
+
+                                                    var note = data1.values;
+
+                                                    var note_inline = note.inline_text;
+                                                    var note_text =  note.note_text;
+                                                    var note_contributor_id = note.perooz_contributor_id;
+                                                    var author_name = note.first_name + ' ' + note.last_name;
+                                                  
+                                                    if (note_contributor_id == pz_contributor_id){
+                                                        //display note and contributor details
+                                                        $('#peroozMain').append('<div id="' + notelist_array[i] + ' peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                                                                    <div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> \
+                                                                                    <div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> \
+                                                                                    <div id="peroozNoteAuthor" class="peroozStyle"> -' + author_name + '</div> \
+                                                                                </div>');
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        xhr1.send();
+
+                                    } 
+
+                                }
+                            }
+
+                            start_id += 7; 
+                        }
+                        xhr.send();
+
+
+
+                        $("#peroozMain").bind('scroll',function(){
+                            if( $(this).scrollTop() == $(this)[0].scrollHeight - $(this).innerHeight() ){
+                                
+                               /*Preloader not working correctly*/
+                               /* var loader_url = chrome.extension.getURL("images/30.gif")
+                                $("peroozMain").append('<div id="loader" class="peroozStyle"><img src=' + loader_url + ' /></div>'); */
+
+                                var xhr = new XMLHttpRequest();
+                                var url = _this.api_url + "api/notegroups/" + notegroup_id + "/note_lists" + "?start=" + start_id + "&max=3"; 
+                                xhr.open("GET", url, false); //note that this is a synchronous request
+                                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                                xhr.setRequestHeader("Client-Id","13adfewasdf432dae");
+                                xhr.setRequestHeader("Session-Token",_this.sess_cookie);
+                                xhr.onreadystatechange = function(){
+                                    if (xhr.readyState == 4){
+                                        var raw_data = xhr.responseText;
+                                        var data=JSON.parse(raw_data);
+
+                                        if (xhr.status == 200){
+                                            
+                                            var notelist_array = data.values;
+                                            var notelist_arrayLength = notelist_array.length; //grab list of notes for notegroup
+
+                                            for (var i=0; i< notelist_arrayLength; i++){ //iterate through notelist
+
+                                                var note_id = notelist_array[i]; //grab note details for each note
+                                                
+                                                /*Set request for note details*/
+                                                var xhr1 = new XMLHttpRequest(); 
+                                                var url1 = _this.api_url + "api/notes/" + notelist_array[i];
+                                                xhr1.open("GET",url1,false); //synchronous request
+                                                xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                                                xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
+                                                xhr1.setRequestHeader("Session-Token",_this.sess_cookie);
+                                                xhr1.onreadystatechange = function(){
+                                                    if (xhr1.readyState == 4){
+                                                        
+                                                        var raw_data1 = xhr1.responseText;
+                                                        var data1 =JSON.parse(raw_data1);
+
+                                                        if (xhr1.status == 200){
+
+                                                            var note = data1.values;
+
+                                                            var note_inline = note.inline_text;
+                                                            var note_text =  note.note_text;
+                                                            var note_contributor_id = note.perooz_contributor_id;
+                                                            var author_name = note.first_name + ' ' + note.last_name;
+
+                                                            
+                                                            if (note_contributor_id == pz_contributor_id){
+                                                                //display note and contributor details
+                                                                $('#peroozMain').append('<div id="' + notelist_array[i] + ' peroozNote" class="peroozStyle" style="background-color:#fff;box-shadow: 0px 0px 10px #d0d0d0;width:340px;margin:10px;"> \
+                                                                                            <div id="peroozNoteInline" class="peroozStyle">' + note_inline + '</div> \
+                                                                                            <div id="peroozNoteText" class="peroozStyle">' + note_text + '</div> \
+                                                                                            <div id="peroozNoteAuthor" class="peroozStyle"> -' + author_name + '</div> \
+                                                                                        </div>');
+                                                            }
+                                                                
+                                                        }
+                                                    }
+                                                }
+                                                xhr1.send();
+
+                                            } 
+
+                                        }
+                                    }
+
+                                    start_id += 3; 
+                                }
+                                xhr.send();
+                            }
+                        });
+
+
+
+                    }
+                }
+            }
+            xhr0.send();
 
         },
 
@@ -732,7 +854,7 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                         }
                     }
                 }
-                xhr.send("article_hyperlink=" + _this.article_url + "&approved=0");
+                xhr.send("article_hyperlink=" + _this.article_url + "&approved=0"); //temporary FIX - cannot grab notegroups unless all entries in article filled
             }
 
             /*If article not properly inserted into db*/
