@@ -30,14 +30,14 @@ var input_validation = function(input,$sel){
  * Function redirects User to sign up tab
  */
 var sign_up = function(){
-	chrome.tabs.create({url: api_url + 'joinus.php'});
+	chrome.tabs.create({url: 'www.perooz.io'});
 }
 
 /**
  * Function redirects users to forgot password 
  */
 var forgot_pw = function(){
-	chrome.tabs.create({url: api_url + 'forgotpw.php'});
+	chrome.tabs.create({url: 'www.perooz.io'});
 }
 
 $(document).ready(function(){
