@@ -878,39 +878,40 @@ var Perooz = (function() { //encapsulated in Perooz variable - have static varia
                     var data=JSON.parse(raw_data);
 
                     if (xhr.status == 200){
-                        pz_note_id =  data.values; 
-
-                        /*If annotation successfully created, run job to create notegroup*/
-                        xhr1 = new XMLHttpRequest(); 
-                        var urljob = _this.api_url + "api/runjob.php"; 
-                        xhr1.open("POST",url,false); //synchronous coding
-                        xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-                        xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
-                        xhr1.setRequestHeader("Session-Token",_this.sess_cookie);
-                        xhr1.onreadystatechange = function(){
-                            if (xhr1.readyState == 4){
-
-                                var raw_data1 = xhr1.responseText;
-                                var data1 = JSON.parse(raw_data1);
-
-                                if (xhr1.status == 200){
-                                    msg1 = data1.values;
-                                }
-                            }
-
-                        }
-                        xhr1.send("substring="+selection+"&note_id="+pz_note_id+"&article_id="+_this.pz_article_id);
+                        pz_note_id =  data.values;
                     }
                 }
             }
             xhr.send("perooz_contributor_id=" + pz_contributor_id + "&perooz_article_id=" + _this.pz_article_id + "&note_type_id=2&inline_text=" + selection + "&note_text=" + note + "&approved=0&sort_order=1"); //initially no sort of chron job approval
 
-            if (pz_note_id){
-                message = "Note successfully created!";
-            }else{
-                message = 'Error creating annotation. Please try again.';
+            if (!pz_note_id){
+                 $(".peroozStyle#peroozMain").html('<div id="peroozMessage" class="peroozStyle">Error creating annotation. Please try again.</div>');
+                 return;
             }
-            $(".peroozStyle#peroozMain").html('<div id="peroozMessage" class="peroozStyle">' + message + '</div>');
+
+            /*If annotation successfully created, run job to create notegroup*/
+            xhr1 = new XMLHttpRequest(); 
+            var urljob = _this.api_url + "api/runjob.php"; 
+            xhr1.open("POST",urljob,false); //synchronous coding
+            xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            xhr1.setRequestHeader("Client-Id","13adfewasdf432dae");
+            xhr1.setRequestHeader("Session-Token",_this.sess_cookie);
+            xhr1.onreadystatechange = function(){
+                if (xhr1.readyState == 4){
+
+                    var raw_data1 = xhr1.responseText;
+                    var data1 = JSON.parse(raw_data1);
+
+                    if (xhr1.status == 200){
+                        msg1 = data1.values;
+
+                    }
+                }
+
+            }
+            xhr1.send("substring="+selection+"&perooz_note_id="+pz_note_id+"&perooz_article_id="+_this.pz_article_id);
+
+            $(".peroozStyle#peroozMain").html('<div id="peroozMessage" class="peroozStyle">Note successfully created!</div>');
             
         },
 
