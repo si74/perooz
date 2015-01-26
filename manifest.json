@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Perooz",
-  "version" : "1.1",
+  "version" : "1.2",
   "description": "The Perooz Chrome extension changes the way you view the world.",
    "browser_action": {
    	"default_icon": "images/icon_minilight_38.png",
