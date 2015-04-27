@@ -1,7 +1,7 @@
-perooz
+perooz - Chrome extension for website annotation. 
 ======
 
-PeroozV1
+Perooz
 Inital iteration of the Perooz annotation chrome extension. 
 <br/><br/>
 This repository consists of only client-side code meant to be run within the browser. To set up server side architecture - look at perooz - Backend code. <br/><br/>
