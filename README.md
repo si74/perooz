@@ -2,8 +2,10 @@ perooz
 ======
 
 PeroozV1
-Inital iteration of the chrome extension. 
+Inital iteration of the Perooz annotation chrome extension. 
 <br/><br/>
+This repository consists of only client-side code meant to be run within the browser. To set up server side architecture - look at perooz - Backend code. <br/><br/>
+
 Consists of following: <br/>
 (1) Manifest.json - chrome extension manifest file<br/>
 (2) js/Background.js - background script for extension<br/>
